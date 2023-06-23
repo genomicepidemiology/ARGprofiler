@@ -12,7 +12,7 @@ rule download_paired_end_reads:
 	conda:"profile_argfinder/environment_argfinder.yaml"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/raw_reads/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.paired_reads}
+		/usr/bin/time -v --output=results/raw_reads/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench enaDataGet -f {params.type} -d {params.outdir} {wildcards.paired_reads}
 		touch {output.check_file_raw}
 		"""
 

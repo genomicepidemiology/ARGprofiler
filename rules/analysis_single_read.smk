@@ -11,7 +11,7 @@ rule download_single_end_reads:
 	conda:"profile_argfinder/environment_argfinder.yaml"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/raw_reads/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.single_reads}
+		/usr/bin/time -v --output=results/raw_reads/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench enaDataGet -f {params.type} -d {params.outdir} {wildcards.single_reads}
 		touch {output.check_file_raw}
 		"""
 
