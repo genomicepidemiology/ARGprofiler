@@ -20,4 +20,11 @@ The tool is described in *Paper_here*
 
 ## Getting started
 
-The best way to install the ARGfinder pipeline is to clone the github repository. Then depending on the 
+The best way to install the ARGfinder pipeline is to clone this github repository. The pipeline uses the Conda package manager to deploy the defined software packages in the specified version without requiring any admin/root priviledges.
+
+```
+git clone https://github.com/genomicepidemiology/ARGfinder.git
+```
+This command will create the directory ARGfinder in the current directory.
+
+Since ARGfinder is a snakemake pipeline the user should have snakemake installed. 
