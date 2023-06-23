@@ -4,7 +4,7 @@ A tool for for large-scale analysis of antimicrobial resistance genes and their 
 
 ## Introduction
 
-ARGfinder is a newly developed snakemake pipeline designed to analyze read distances, abundancies and genomic flanking regions of ARGs in metagenomic sequencing data. It has been adapted to work for short-read sequencing datasets and includes the recently made Panres database, a combined collection of current ARG databases, and ARGextender, an assembly tool for extending the genomic flanking region arouns genes of interest.
+ARGfinder is a newly developed Snakemake pipeline designed to analyze read distances, abundancies and genomic flanking regions of ARGs in metagenomic sequencing data. It has been adapted to work for short-read sequencing datasets and includes the recently made Panres database, a combined collection of current ARG databases, and ARGextender, an assembly tool for extending the genomic flanking region arouns genes of interest.
 
 ARGfinder uses the following tools:
 
@@ -18,7 +18,7 @@ ARGfinder uses the following tools:
 
 The tool is described in *Paper_here*
 
-## Getting started
+## Installation
 
 The best way to install the ARGfinder pipeline is to clone this github repository. The pipeline uses the Conda package manager to deploy the defined software packages in the specified version without requiring any admin/root priviledges.
 
@@ -27,4 +27,8 @@ git clone https://github.com/genomicepidemiology/ARGfinder.git
 ```
 This command will create the directory ARGfinder in the current directory.
 
-Since ARGfinder is a snakemake pipeline the user should have snakemake installed. 
+Since ARGfinder is a Snakemake pipeline the user should have Snakemake workflow management installed. 
+
+## Getting started
+
+ARGfinder make use of Snakemake profile to specify configuration of the pipeline. The various flags that are needed, are specified in the files of the ``` profile_argfinder ``` directory.
