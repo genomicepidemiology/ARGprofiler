@@ -68,7 +68,7 @@ For example:
 {"ERR3593315":{"type":"PAIRED"},"SRR7533096":{"type":"SINGLE"}}
 ```
 
-The user has also to specify the names of the input file in the Snakefile (with open...).
+The user has also to specify the name of the input file in the Snakefile (with open...).
 
 ## Running ARGfinder
 
@@ -78,4 +78,32 @@ In order to run ARGfinder the user should execute the following command:
 snakemake --profile profile_argfinder
 ```
 
+We remind that the execution of the pipeline requires the installation of Snakemake workflow management beforehand.
+
 ## Output
+
+When successfully executed, ARGfinder creates a directory by the name ``` results ``` where the user can find out all the available results from all the analysis steps (results are separated in single and paired reads results). More specifically:
+
+
+* ``` raw_reads ``` directory contains all the downloaded sequencing datasets + benchmarking files
+* ``` trimmed_reads ``` directory contains all the trimmed sequencing datasets + benchmarking files
+* ``` kma_mOTUs ``` directory contains all the alignment result files with mOTUs database.
+	* res file = A result overview giving the most common statistics for each mapped template.
+	* mapstat file = 
+	* fsa.gz = The consensus sequences drawn from the alignments (zipped)
+	* mat.gz = Base counts on each position in each template, (zipped)
+	* vcf.gz = 
+* ``` kma_panres ``` directory contains all the alignment result files with PanRes database.
+	* res file = A result overview giving the most common statistics for each mapped template.
+	* mapstat file = 
+	* mapstat.filtered file = 
+	* bam file =
+	* fsa.gz = The consensus sequences drawn from the alignments (zipped)
+	* mat.gz = Base counts on each position in each template, (zipped)
+	* vcf.gz = 
+* ``` ARGextender ``` for extracting the genomic flanking regions around ARGs
+	* fasta file = fasta file with the extracted flanking sequences
+	* frag.gz file =
+	* frag_raw.gz = 
+	* gfa.gz =  
+* ``` Mash ``` directory contains the sketches for each sequecning dataset
