@@ -55,9 +55,18 @@ There are some prerequisites for using ARGfinder:
 ## Input
 
 ARGfinder takes as input a file with the following format:
+
+```
+{Accession_run_id:{"type":reading_type},"Accession_run_id":{"type":"reading_type"}}
+```
+
+For example:
+
 ```
 {"ERR3593315":{"type":"PAIRED"},"SRR7533096":{"type":"SINGLE"}}
 ```
+
+Here you can see an exaple of 1 paired reads samples and 1 single reads sample added in the file. 
 
 The user has aldo to specify the names of the file in the Snakefile (with open...)
 
