@@ -41,14 +41,18 @@ There are some prerequisites for using ARGfinder:
 		1. Move to mOTUs directory in the ``` prerequisites ``` directory
 		2. wget https://zenodo.org/record/5140350/files/db_mOTU_v3.0.1.tar.gz
 		3. tar -xzf db_mOTU_v3.0.1.tar.gz
-		4. kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTU (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+		4. kma index -i mOTUs/db_mOTU_DB_CEN.fasta -o db_mOTU (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
 	* For ``` PanRes``` the user has to download the database from zenodo, unzip it and then index it with KMA:
 		1. Move to panres directory in the ``` prerequisites ``` directory
 		2. wget https://zenodo.org/record/
 		3. tar -xzf 
-		4. kma index -i   -o db_panres (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+		4. kma index -i panres/panres_db -o db_panres (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
 * The pipeline make use of Snakemake profiles to specify configuration of the pipeline. The various flags that are needed, are specified in the files of the ``` profile_argfinder ``` directory.
 
+## Input
+
 ## Running ARGfinder
+
+## Output

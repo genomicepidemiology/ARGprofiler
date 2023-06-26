@@ -6,7 +6,7 @@ configfile: "profile_argfinder/environment_argfinder.yaml"
 include: "rules/analysis_paired_read.smk"
 include: "rules/analysis_single_read.smk"
 
-with open("runs_batch0.json", 'r') as f:
+with open(input_file_here, 'r') as f:
   data = json.load(f)
 
 accession=[]
@@ -60,14 +60,6 @@ rule all:
 		expand("results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat.filtered", single_reads=single),
 		expand("results/kma_panres/single_end/{single_reads}/{single_reads}.bam", single_reads=single),
 		expand("results/kma_panres/single_end/{single_reads}/{single_reads}_check_file_kma.txt", single_reads=single),
-		expand("results/kma_virulence/paired_end/{paired_reads}/{paired_reads}.res", paired_reads=paired),
-		expand("results/kma_virulence/paired_end/{paired_reads}/{paired_reads}.mat.gz", paired_reads=paired),
-		expand("results/kma_virulence/paired_end/{paired_reads}/{paired_reads}.mapstat", paired_reads=paired),
-		expand("results/kma_virulence/paired_end/{paired_reads}/{paired_reads}_check_file_kma.txt", paired_reads=paired),
-		expand("results/kma_virulence/single_end/{single_reads}/{single_reads}.res", single_reads=single),
-		expand("results/kma_virulence/single_end/{single_reads}/{single_reads}.mat.gz", single_reads=single),
-		expand("results/kma_virulence/single_end/{single_reads}/{single_reads}.mapstat", single_reads=single),
-		expand("results/kma_virulence/single_end/{single_reads}/{single_reads}_check_file_kma.txt", single_reads=single),
 		expand("results/mash_sketch/paired_end/{paired_reads}/{paired_reads}.trimmed.fastq.msh", paired_reads=paired),
 		expand("results/mash_sketch/paired_end/{paired_reads}/{paired_reads}_check_file_mash.txt", paired_reads=paired),
 		expand("results/mash_sketch/single_end/{single_reads}/{single_reads}.trimmed.fastq.msh", single_reads=single),
