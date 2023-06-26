@@ -51,13 +51,15 @@ There are some prerequisites for using ARGfinder:
 		4. kma index -i panres/panres_db -o db_panres (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
 * The pipeline make use of Snakemake profiles to specify configuration of the pipeline. The various flags that are needed, are specified in the files of the ``` profile_argfinder ``` directory.
+	
+	* We provide a config file for executing the pipeline in an HPC with qsub
 
 ## Input
 
 ARGfinder takes as input a file with the following format:
 
 ```
-{Accession_run_id:{"type":reading_type},"Accession_run_id":{"type":"reading_type"}}
+{Accession_run_id:{"type":reading_type},"Accession_run_id":{"type":reading_type}}
 ```
 
 For example:
@@ -66,10 +68,14 @@ For example:
 {"ERR3593315":{"type":"PAIRED"},"SRR7533096":{"type":"SINGLE"}}
 ```
 
-Here you can see an exaple of 1 paired reads samples and 1 single reads sample added in the file. 
-
-The user has aldo to specify the names of the file in the Snakefile (with open...)
+The user has also to specify the names of the input file in the Snakefile (with open...).
 
 ## Running ARGfinder
+
+In order to run ARGfinder the user should execute the following command:
+
+```
+snakemake --profile profile_argfinder
+```
 
 ## Output
