@@ -35,7 +35,7 @@ There are some prerequisites for using ARGfinder:
 
 * The user needs to download the 2 reference databases (mOTUs and PanRes), place them in the the correct directory and then index them with KMA. 
 
-	* Creta mOTUs and panres subdirectories in the prerequisites directory.
+	* Create mOTUs and panres subdirectories in the ``` prerequisites ``` directory.
 
 	* For ``` mOTUs``` the user has to download the database from zenodo, unzip it and then index it with KMA:
 		1. wget https://zenodo.org/record/5140350/files/db_mOTU_v3.0.1.tar.gz
