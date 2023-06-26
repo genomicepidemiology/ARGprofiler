@@ -31,4 +31,9 @@ Since ARGfinder is a Snakemake pipeline the user should have Snakemake workflow 
 
 ## Getting started
 
-ARGfinder make use of Snakemake profile to specify configuration of the pipeline. The various flags that are needed, are specified in the files of the ``` profile_argfinder ``` directory.
+There are some prerequisites for using ARGfinder:
+
+* The user needs to download and index the 2 reference databases (mOTUs and PanRes) 
+	* test
+
+* The pipeline make use of Snakemake profile to specify configuration of the pipeline. The various flags that are needed, are specified in the files of the ``` profile_argfinder ``` directory.
