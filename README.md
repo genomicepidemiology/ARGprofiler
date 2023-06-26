@@ -33,12 +33,20 @@ Since ARGfinder is a Snakemake pipeline the user should have Snakemake workflow 
 
 There are some prerequisites for using ARGfinder:
 
-* The user needs to download and index the 2 reference databases (mOTUs and PanRes) 
+* The user needs to download the 2 reference databases (mOTUs and PanRes), place them in the the correct directory and then index them with KMA. 
+
+	* Creta mOTUs and panres subdirectories in the prerequisites directory.
 
 	* For ``` mOTUs``` the user has to download the database from zenodo, unzip it and then index it with KMA:
 		1. wget https://zenodo.org/record/5140350/files/db_mOTU_v3.0.1.tar.gz
 		2. tar -xzf db_mOTU_v3.0.1.tar.gz
-		3. kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTU_20221205 
-		For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a> 
+		3. kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTU (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+
+	* For ``` PanRes``` the user has to download the database from zenodo, unzip it and then index it with KMA:
+		1. wget https://zenodo.org/record/
+		2. tar -xzf 
+		3. kma index -i   -o db_panres (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+
+
 
 * The pipeline make use of Snakemake profile to specify configuration of the pipeline. The various flags that are needed, are specified in the files of the ``` profile_argfinder ``` directory.
