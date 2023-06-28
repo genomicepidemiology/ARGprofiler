@@ -42,7 +42,7 @@ There are some prerequisites for using ARGfinder:
 		1. Move to mOTUs directory in the ``` prerequisites ``` directory
 		2. wget https://zenodo.org/record/5140350/files/db_mOTU_v3.0.1.tar.gz
 		3. tar -xzf db_mOTU_v3.0.1.tar.gz
-		4. kma index -i mOTUs/db_mOTU_DB_CEN.fasta -o db_mOTU (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+		4. kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTU (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
 	* For ``` PanRes``` the user has to download the database from zenodo, unzip it and then index it with KMA:
 		1. Move to panres directory in the ``` prerequisites ``` directory
@@ -111,7 +111,7 @@ When successfully executed, ARGfinder creates a directory by the name ``` result
 ## Good to know
 
 * In order to save space ARGfinder removes the raw and trimmed reads from each sample. 
-* Apart from the regular output files, kma_panres also provides a BAM file with the 
+* Apart from the regular output files, kma_panres also provides a BAM file.
 * ARGextender will run until there is nothing more to extend.
 * 
 

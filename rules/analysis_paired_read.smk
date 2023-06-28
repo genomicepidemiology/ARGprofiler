@@ -58,7 +58,7 @@ rule kma_paired_end_reads_mOTUs:
     	"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.mapstat",
     	check_file_kma_mOTUs="results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}_check_file_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/mOTUs_20221205/db_mOTU_20221205",
+		db="prerequisites/mOTUs/db_mOTU",
 		outdir="results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}",
 		kma_params="-mem_mode -ef -1t1 -apm p -oa -matrix"
 	conda:"profile_argfinder/environment_argfinder.yaml"
