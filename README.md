@@ -113,7 +113,7 @@ When successfully executed, ARGfinder creates a directory by the name ``` result
 * In order to save space ARGfinder removes the raw and trimmed reads from each sample. 
 * Apart from the regular output files, kma_panres also provides a BAM file.
 * ARGextender will run until there is nothing more to extend.
-* The user should create the ``` logs ``` directory in the main directory.
+* The user should create a ``` logs ``` directory in the main directory if he/she wishes to have log files for each job.
 * We have noticed that the enaBrowserTools conda package is a bit unstable and from time to time it is not working properly. In that case we suggest that you clone their repository in the ``` prerequisites ``` directory and use the code they provide (You can find the repository <a href="https://github.com/enasequence/enaBrowserTools/">here</a>)
 
 ## Citation
