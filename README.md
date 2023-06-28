@@ -91,19 +91,28 @@ When successfully executed, ARGfinder creates a directory by the name ``` result
 	* res file = A result overview giving the most common statistics for each mapped template.
 	* mapstat file = 
 	* fsa.gz = The consensus sequences drawn from the alignments (zipped)
-	* mat.gz = Base counts on each position in each template, (zipped)
+	* mat.gz = Base counts on each position in each template (zipped)
 	* vcf.gz = 
 * ``` kma_panres ``` directory contains all the alignment result files with PanRes database.
 	* res file = A result overview giving the most common statistics for each mapped template.
 	* mapstat file = 
 	* mapstat.filtered file = 
-	* bam file =
+	* bam file = 
 	* fsa.gz = The consensus sequences drawn from the alignments (zipped)
-	* mat.gz = Base counts on each position in each template, (zipped)
+	* mat.gz = Base counts on each position in each template (zipped)
 	* vcf.gz = 
 * ``` ARGextender ``` for extracting the genomic flanking regions around ARGs
 	* fasta file = fasta file with the extracted flanking sequences
-	* frag.gz file =
-	* frag_raw.gz = 
+	* frag.gz file = overview file that contains information on the following: Contig_seq, Number of matching ARGs, Alignment score, Start pos., End pos., Template name, Contig name
+	* frag_raw.gz = Similar file with fra.gz but with all ARGs that can align to any of the contigs
 	* gfa.gz =  
-* ``` Mash ``` directory contains the sketches for each sequecning dataset
+* ``` Mash ``` directory contains the mash sketches for each sequecning dataset
+
+## Good to know
+
+* In order to save space ARGfinder removes the raw and trimmed reads from each sample. 
+* Apart from the regular output files, kma_panres also provides a BAM file with the 
+* ARGextender will run until there is nothing more to extend.
+* 
+
+## Citation
