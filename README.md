@@ -48,7 +48,7 @@ There are some prerequisites for using ARGfinder:
 		1. Move to panres directory in the ``` prerequisites ``` directory
 		2. wget https://zenodo.org/record/
 		3. tar -xzf 
-		4. kma index -i panres/panres_db -o db_panres (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+		4. kma index -i pan.fa -o panres_db (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
 * The pipeline make use of Snakemake profiles to specify configuration of the pipeline. The various flags that are needed, are specified in the files of the ``` profile_argfinder ``` directory.
 	
