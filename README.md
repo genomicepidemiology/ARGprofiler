@@ -109,10 +109,14 @@ When successfully executed, ARGfinder creates a directory named ``` results ```,
 	* gfa.gz =  
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 * ``` Mash ``` directory contains the mash sketches for each sequecning dataset + benchmarking files
 =======
 * ``` Mash ``` directory contains the mash sketches for each sequencing dataset
 >>>>>>> 1777083a30f824bb229cfb3fb281a3e0110ec7ed
+=======
+* ``` Mash ``` directory contains the mash sketches for each sequencing dataset
+>>>>>>> 1777083... Update README.md
 =======
 * ``` Mash ``` directory contains the mash sketches for each sequencing dataset
 >>>>>>> 1777083... Update README.md
@@ -124,9 +128,15 @@ When successfully executed, ARGfinder creates a directory named ``` results ```,
 * ARGextender will, by default, run until there is nothing more to extend.
 * The user should create a ``` logs ``` directory in the main directory if they wish to have log files for each job.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ## Citation
 
+=======
+
+## Citation
+
+>>>>>>> 1777083... Update README.md
 =======
 
 ## Citation
