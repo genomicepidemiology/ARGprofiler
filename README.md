@@ -95,18 +95,18 @@ When successfully executed, ARGfinder creates a directory by the name ``` result
 	* vcf.gz = 
 * ``` kma_panres ``` directory contains all the alignment result files with PanRes database.
 	* res file = A result overview giving the most common statistics for each mapped template.
-	* mapstat file = 
-	* mapstat.filtered file = 
+	* mapstat file = Summarized read abundancies
+	* mapstat.filtered file = Filtered summarized read abundancies (Learn more about our filtering scheme here)
 	* bam file = 
 	* fsa.gz = The consensus sequences drawn from the alignments (zipped)
 	* mat.gz = Base counts on each position in each template (zipped)
 	* vcf.gz = 
-* ``` ARGextender ``` for extracting the genomic flanking regions around ARGs
-	* fasta file = fasta file with the extracted flanking sequences
-	* frag.gz file = overview file that contains information on the following: Contig_seq, Number of matching ARGs, Alignment score, Start pos., End pos., Template name, Contig name
-	* frag_raw.gz = Similar file with fra.gz but with all ARGs that can align to any of the contigs
+* ``` ARGextender ``` for extracting the genomic flanking regions around ARGs + benchmarking files
+	* fasta file = fasta file with the extracted flanking sequences.
+	* frag.gz file = overview file that contains information on the following: Contig_seq, Number of matching ARGs, Alignment score, Start pos., End pos., Template name, Contig name.
+	* frag_raw.gz = Similar file with fra.gz but with all ARGs that can align to any of the contigs. Read, Number of equally well mapping templates, Mapping score, Start pos., End pos. (w.r.t. template), Choosen template(s).
 	* gfa.gz =  
-* ``` Mash ``` directory contains the mash sketches for each sequecning dataset
+* ``` Mash ``` directory contains the mash sketches for each sequecning dataset + benchmarking files
 
 ## Tips and Tricks
 

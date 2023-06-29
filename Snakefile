@@ -1,12 +1,12 @@
 import json
 import os
 
-configfile: "profile_argfinder/environment_argfinder.yaml"
+configfile: "rules/environment_argfinder.yaml"
 
 include: "rules/analysis_paired_read.smk"
 include: "rules/analysis_single_read.smk"
 
-with open(input_file_here, 'r') as f:
+with open("run_batch.json", 'r') as f:
   data = json.load(f)
 
 accession=[]

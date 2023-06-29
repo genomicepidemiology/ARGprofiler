@@ -4,104 +4,104 @@
      	"core" : "1:thinnode",
         "time" : "00:30:00",
         "vmem" : "20G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "download_paired_end_reads" :
     {
         "core" : "20:thinnode",
         "time" : "04:00:00",
         "vmem" : "20G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "download_single_end_reads" :
     {
         "core" : "20:thinnode",
         "time" : "04:00:00",
         "vmem" : "20G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "trim_paired_end_reads" :
     {
      	"core" : "8:thinnode",
         "time" : "20:00:00",
         "vmem" : "40G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "trim_single_end_reads" :
     {
      	"core" : "8:thinnode",
         "time" : "20:00:00",
         "vmem" : "40G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "kma_paired_end_reads_mOTUs" :
     {
         "core" : "20:thinnode",
         "time" : "30:00:00",
         "vmem" : "60G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "kma_single_end_reads_mOTUs" :
     {
         "core" : "20:thinnode",
         "time" : "30:00:00",
         "vmem" : "60G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "kma_paired_end_reads_panRes" :
     {
         "core" : "2:thinnode",
         "time" : "06:00:00",
         "vmem" : "5G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "kma_single_end_reads_panRes" :
     {
         "core" : "2:thinnode",
         "time" : "06:00:00",
         "vmem" : "5G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "kma_paired_end_reads_virulence_finder" :
     {
         "core" : "2:thinnode",
         "time" : "06:00:00",
         "vmem" : "5G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "kma_single_end_reads_virulence_finder" :
     {
         "core" : "2:thinnode",
         "time" : "06:00:00",
         "vmem" : "5G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "mash_sketch_paired_end_reads" :
     {
         "core" : "20:thinnode",
         "time" : "04:00:00",
         "vmem" : "20G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "mash_sketch_single_end_reads" :
     {
         "core" : "20:thinnode",
         "time" : "04:00:00",
         "vmem" : "20G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "seed_extender_paired_reads" :
     {
         "core" : "20:thinnode",
         "time" : "40:00:00",
         "vmem" : "50G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     },
     "seed_extender_single_reads" :
     {
         "core" : "20:thinnode",
         "time" : "40:00:00",
         "vmem" : "50G",
-        "proj" : ""
+        "proj" : "dtu_00056"
     }
 }
