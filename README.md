@@ -98,7 +98,7 @@ When successfully executed, ARGfinder creates a directory named ``` results ```,
 	* res file = A result overview giving the most common statistics for each mapped template.
 	* mapstat file = Summarized read abundancies
 	* mapstat.filtered file = Filtered summarized read abundancies (Learn more about our filtering scheme here).
-	* bam file = 
+	* bam file = Alignment information (compressed)
 	* fsa.gz = The consensus sequences are drawn from the alignments (zipped).
 	* mat.gz = Base counts on each position in each template (zipped).
 	* vcf.gz = Sequence variations.
