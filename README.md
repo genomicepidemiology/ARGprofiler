@@ -48,7 +48,9 @@ There are some prerequisites for using ARGfinder:
 		1. Move to PanRes directory in the ``` prerequisites ``` directory
 		2. `wget https://zenodo.org/record/`
 		3. `tar -xzf` 
-		4. `kma index -i pan.fa -o panres_db` (For KMA instructions, you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+		4. `kma index -i pan.fa -o panres_db` (For KMA instructions, you can check  <a href="https://github.com/enasequence/enaBrowserTools">here</a>)
+
+* The user needs to clone the enaBrowserTools repository and place it in the ``` prerequisites ``` directory. enaBrowserTools can be found <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>
 
 * The pipeline makes use of Snakemake profiles to specify the configuration of the pipeline. The required flags are specified in the files of the ``` profile_argfinder ``` directory.
 	
