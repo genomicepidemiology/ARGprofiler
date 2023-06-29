@@ -102,7 +102,7 @@ When successfully executed, ARGfinder creates a directory named ``` results ```,
 	* fsa.gz = The consensus sequences are drawn from the alignments (zipped).
 	* mat.gz = Base counts on each position in each template (zipped).
 	* vcf.gz = Sequence variations.
-* ``` ARGextender ``` directory for extracting the genomic flanking regions around ARGs + benchmarking files.
+* ``` argextender ``` directory for extracting the genomic flanking regions around ARGs + benchmarking files.
 	* fasta file = fasta file with the extracted flanking sequences.
 	* frag.gz file = overview file that contains information on the following: Contig_seq, Number of matching ARGs, Alignment score, Start pos., End pos., Template name, Contig name.
 	* frag_raw.gz = Similar file with fra.gz but with all ARGs that can align to any of the contigs. Read, Number of equally well mapping templates, Mapping score, Start pos., End pos. (w.r.t. template), Choosen template(s).

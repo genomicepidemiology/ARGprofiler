@@ -90,14 +90,14 @@
         "vmem" : "20G",
         "proj" : "dtu_00056"
     },
-    "seed_extender_paired_reads" :
+    "arg_extender_paired_reads" :
     {
         "core" : "20:thinnode",
         "time" : "40:00:00",
         "vmem" : "50G",
         "proj" : "dtu_00056"
     },
-    "seed_extender_single_reads" :
+    "arg_extender_single_reads" :
     {
         "core" : "20:thinnode",
         "time" : "40:00:00",

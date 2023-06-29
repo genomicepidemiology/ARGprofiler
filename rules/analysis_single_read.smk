@@ -106,7 +106,7 @@ rule mash_sketch_single_end_reads:
 		touch {output.check_file_mash}
 		"""
 
-rule seed_extender_single_reads:
+rule arg_extender_single_reads:
 	"""
 	Performing local seed extension of paired reads using perl script
 	"""
@@ -114,23 +114,23 @@ rule seed_extender_single_reads:
 		read_1=ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"),
 		panres_mapstat_filtered="results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat.filtered"
 	output:
-		out_fasta="results/seed_extender/single_end/{single_reads}/{single_reads}.fasta.gz",
-		out_gfa="results/seed_extender/single_end/{single_reads}/{single_reads}.gfa.gz",
-		out_frag="results/seed_extender/single_end/{single_reads}/{single_reads}.frag.gz",
-		out_frag_gz="results/seed_extender/single_end/{single_reads}/{single_reads}.frag_raw.gz",
-		check_file_seed="results/seed_extender/single_end/{single_reads}/{single_reads}_check_file_seed.txt"
+		out_fasta="results/argextender/single_end/{single_reads}/{single_reads}.fasta.gz",
+		out_gfa="results/argextender/single_end/{single_reads}/{single_reads}.gfa.gz",
+		out_frag="results/argextender/single_end/{single_reads}/{single_reads}.frag.gz",
+		out_frag_gz="results/argextender/single_end/{single_reads}/{single_reads}.frag_raw.gz",
+		check_file_seed="results/argextender/single_end/{single_reads}/{single_reads}_check_file_seed.txt"
 	params:
 		seed="-1",
-		temp_dir="results/seed_extender/single_end/{single_reads}/{single_reads}",
+		temp_dir="results/argextender/single_end/{single_reads}/{single_reads}",
 		db="/home/databases/metagenomics/db/panres_20230420/pan.fa"
 	conda:"environment_argfinder.yaml"
 	shell:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 
 		then
-			/usr/bin/time -v --output=results/seed_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.seed} {params.temp_dir} {params.db} {input.read_1}
-			gzip -f results/seed_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta
-			gzip -f results/seed_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.gfa
+			/usr/bin/time -v --output=results/argextender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.seed} {params.temp_dir} {params.db} {input.read_1}
+			gzip -f results/argextender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta
+			gzip -f results/argextender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.gfa
 			touch {output.check_file_seed}
 		else
 			touch {output.out_fasta}
@@ -151,7 +151,7 @@ rule cleanup_single_end_reads:
 		check_file_kma_mOTUs="results/kma_mOTUs/single_end/{single_reads}/{single_reads}_check_file_kma.txt",
 		check_file_kma_panres="results/kma_panres/single_end/{single_reads}/{single_reads}_check_file_kma.txt",
 		check_file_mash="results/mash_sketch/single_end/{single_reads}/{single_reads}_check_file_mash.txt",
-		check_file_seed="results/seed_extender/single_end/{single_reads}/{single_reads}_check_file_seed.txt"
+		check_file_seed="results/argextender/single_end/{single_reads}/{single_reads}_check_file_seed.txt"
 	output:
 		check_file_clean_final1="results/raw_reads/single_end/{single_reads}/check_clean_raw.txt",
 		check_file_clean_final2="results/trimmed_reads/single_end/{single_reads}/check_clean_trim.txt"
