@@ -1,0 +1,12 @@
+#ignore specific files
+*/.DS_store
+.DS_store
+prerequisites/db_*/*.comp.b
+prerequisites/db_*/*.length.b
+prerequisites/db_*/*.name
+prerequisites/db_*/*.seq.b
+
+# folders
+prerequisites/enaBrowserTools
+results
+.snakemake
