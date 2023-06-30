@@ -47,7 +47,7 @@ There are some prerequisites for using ARGfinder:
 		3. `tar -xzf` 
 		4. `kma index -i pan.fa -o panres_db` (For KMA instructions, you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
-* The user needs to clone the enaBrowserTools repository and place it in the ``` prerequisites ``` directory. enaBrowserTools can be found <a href="https://github.com/enasequence/enaBrowserTools">here</a>
+* The user needs to clone the [enaBrowserTools](https://github.com/enasequence/enaBrowserTools) repository and place it in the ``` prerequisites ``` directory:  `git clone https://github.com/enasequence/enaBrowserTools.git prerequisites/enaBrowserTools`
 
 * The pipeline makes use of Snakemake profiles to specify the configuration of the pipeline. The required flags are specified in the files of the ``` profile_argfinder ``` directory.
 	
@@ -55,7 +55,7 @@ There are some prerequisites for using ARGfinder:
 
 ## Input
 
-ARGfinder takes as input a JSON file with the following format:
+ARGfinder takes as input a JSON file named [`input.json`](input.json) in the following format:
 
 ```
 {run_accession:{"type":READ_TYPE},"run_accession":{"type":READ_TYPE}}

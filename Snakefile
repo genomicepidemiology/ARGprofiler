@@ -6,7 +6,7 @@ configfile: "rules/environment_argfinder.yaml"
 include: "rules/analysis_paired_read.smk"
 include: "rules/analysis_single_read.smk"
 
-with open("run_batch.json", 'r') as f:
+with open("input.json", 'r') as f:
   data = json.load(f)
 
 accession=[]
