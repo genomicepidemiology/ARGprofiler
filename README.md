@@ -72,13 +72,26 @@ The user can also opt to specify the name of the input file in the Snakefile (wi
 
 ## Running ARGfinder
 
-To run ARGfinder, the user should execute the following command:
+### HPC
+To run ARGfinder on a HPC with a queuing system, the user should execute the following command:
 
 ```
 snakemake --profile profile_argfinder
 ```
 
-Reminder: execution of the pipeline requires installing the Snakemake workflow management beforehand.
+### Locally
+While we have designed ARGfinder to run in a HPC environment (specifically [Computerome](https://www.computerome.dk/)), it is possible to run the pipeline locally. Therefore, we recommend to create a mamba environment as follows:
+```{bash}
+mamba env create --name argfinder --file rules/environment_argfinder.yaml
+```
+
+Then activate the environment and run Snakemake:
+```{bash}
+mamba activate argfinder
+snakemake --use-conda -c1
+```
+The `-c1` flag should be changed to reflect the number of cores for Snakemake to use.
+
 
 ## Output
 
