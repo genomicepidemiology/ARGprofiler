@@ -57,7 +57,7 @@ rule kma_paired_end_reads_mOTUs:
 		"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.mapstat",
 		check_file_kma_mOTUs="results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}_check_file_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/mOTUs_20221205/db_mOTU_20221205",
+		db="prerequisites/db_motus/db_mOTUs",
 		outdir="results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}",
 		kma_params="-mem_mode -ef -1t1 -apm p -oa -matrix"
 	conda:"environment_argfinder.yaml"
@@ -85,7 +85,7 @@ rule kma_paired_end_reads_panRes:
 		"results/kma_panres/paired_end/{paired_reads}/{paired_reads}.mapstat.filtered",
 		check_file_kma_panres="results/kma_panres/paired_end/{paired_reads}/{paired_reads}_check_file_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/panres_20230420/panres_20230420",
+		db="prerequisites/db_panres/panres_20230420",
 		outdir="results/kma_panres/paired_end/{paired_reads}/{paired_reads}",
 		kma_params="-ef -1t1 -nf -vcf -sam -matrix",
 		mapstat="results/kma_panres/paired_end/{paired_reads}/{paired_reads}.mapstat",
@@ -137,7 +137,7 @@ rule arg_extender_paired_reads:
 	params:
 		seed="-1",
 		temp_dir="results/argextender/paired_end/{paired_reads}/{paired_reads}",
-		db="/home/databases/metagenomics/db/panres_20230420/pan.fa"
+		db="prerequisites/db_panres/pan.fa"
 	conda:"environment_argfinder.yaml"
 	shell:
 		"""

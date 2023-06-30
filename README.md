@@ -35,17 +35,14 @@ Since ARGfinder is a Snakemake pipeline, the user should install Snakemake workf
 There are some prerequisites for using ARGfinder:
 
 * The user needs to download two reference databases (mOTUs and PanRes), place them in the correct directory, and then index them with KMA. 
-
-	* Create mOTUs and PanRes subdirectories in the ``` prerequisites ``` directory.
-
-	* For ``` mOTUs``` the user has to download the database from Zenodo, unzip it, and then index it with KMA:
-		1. Move to the mOTUs directory in the ``` prerequisites ``` directory
+	* For ``` mOTUs``` the user has to download the database from Zenodo into `prerequisites/db_motus`, unzip it, and then index it with KMA:
+		1. `cd prerequisites/db_motus`
 		2. `wget https://zenodo.org/record/5140350/files/db_mOTU_v3.0.1.tar.gz`
 		3. `tar -xzf db_mOTU_v3.0.1.tar.gz`
-		4. `kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTU` (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+		4. `kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTUs` (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
-	* For ``` PanRes``` the user has to download the database from Zenodo, unzip it, and then index it with KMA:
-		1. Move to PanRes directory in the ``` prerequisites ``` directory
+	* For ``` PanRes``` the user has to download the database from Zenodo into `prerequisites/db_panres`, unzip it, and then index it with KMA:
+		1. `cd prerequisites/db_panres`
 		2. `wget https://zenodo.org/record/`
 		3. `tar -xzf` 
 		4. `kma index -i pan.fa -o panres_db` (For KMA instructions, you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
