@@ -90,7 +90,7 @@ While we have designed ARGfinder to run in a HPC environment (specifically [Comp
 mamba env create --name argfinder --file rules/environment_argfinder.yaml
 ```
 
-Since we are not executing ARGfinder in HPC the user should remove the following flag from the config file: ```cluster, cluster-config, jobs``` and add the following flag: ```cores``` (The ```cores``` flag should be changed to reflect the number of cores for Snakemake to use). 
+Since we are not executing ARGfinder in HPC the user should remove the following flag from the config file: ```cluster, cluster-config``` and add the following flag: ```cores``` (The ```cores``` flag should be changed to reflect the number of cores for Snakemake to use). 
 
 Then activate the environment and run Snakemake:
 
