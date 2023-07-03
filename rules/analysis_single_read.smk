@@ -9,6 +9,10 @@ rule download_single_end_reads:
 		outdir="results/raw_reads/single_end",
 		type="fastq"
 	benchmark: "results/raw_reads/single_end/{single_reads}/{single_reads}.bench"
+	envmodules:
+		"tools",
+		"anaconda3/2022.10",
+		"enabrowsertools/1.1.0"
 	shell:
 		"""
 		python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.single_reads}
@@ -33,6 +37,9 @@ rule trim_single_end_reads:
 		j="results/trimmed_reads/single_end/{single_reads}/{single_reads}.json"
 	conda:"environment_argfinder.yaml"
 	benchmark:"results/trimmed_reads/single_end/{single_reads}/{single_reads}.bench"
+	envmodules:
+		"tools",
+		"fastp/0.23.2"
 	shell:
 		"""
 		fastp -i {input} -o {output} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -j {params.j}
@@ -55,6 +62,9 @@ rule kma_single_end_reads_mOTUs:
 		kma_params="-mem_mode -ef -1t1 -apm p -oa -matrix"
 	conda:"environment_argfinder.yaml"
 	benchmark:"results/kma_mOTUs/single_end/{single_reads}/{single_reads}.bench"
+	envmodules:
+		"tools",
+		"kma/1.4.12a"
 	shell:
 		"""
 		kma -i {input} -o {params.outdir} -t_db {params.db} {params.kma_params}
@@ -85,6 +95,13 @@ rule kma_single_end_reads_panRes:
 		mapstat_table="prerequisites/mapstat_filtering/pan_master_gene_tbl.tsv"
 	conda:"environment_argfinder.yaml"
 	benchmark:"results/kma_panres/single_end/{single_reads}/{single_reads}.bench"
+	envmodules:
+		"tools",
+		"kma/1.4.12a",
+		"samtools/1.16",
+		"gcc/9.4.0",
+		"intel/perflibs/64/2020_update2",
+		"R/4.3.0"
 	shell:
 		"""
 		kma -i {input} -o {params.outdir} -t_db {params.db} {params.kma_params} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bam
@@ -105,6 +122,9 @@ rule mash_sketch_single_end_reads:
 		check_file_mash="results/mash_sketch/single_end/{single_reads}/{single_reads}_check_file_mash.txt"
 	conda:"environment_argfinder.yaml"
 	benchmark:"results/mash_sketch/single_end/{single_reads}/{single_reads}.bench"
+	nvmodules:
+		"tools",
+		"mash/2.3"
 	shell:
 		"""
 		mash sketch -k 31 -s 10000 -o {output.out} -r {input}
@@ -130,6 +150,12 @@ rule arg_extender_single_reads:
 		db="prerequisites/db_panres/pan.fa"
 	conda:"environment_argfinder.yaml"
 	benchmark: "results/argextender/single_end/{single_reads}/{single_reads}.bench"
+	envmodules:
+		"tools",
+		"kma/1.4.12a",
+		"anaconda3/2022.10",
+		"spades/3.15.5",
+		"fqgrep/0.0.3"
 	shell:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 

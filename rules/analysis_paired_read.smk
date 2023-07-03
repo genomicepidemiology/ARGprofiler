@@ -11,6 +11,10 @@ rule download_paired_end_reads:
 		type="fastq"
 	benchmark:
 		"results/raw_reads/paired_end/{paired_reads}/{paired_reads}.bench"
+	envmodules:
+		"tools",
+		"anaconda3/2022.10",
+		"enabrowsertools/1.1.0"
 	shell:
 		"""
 		python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.paired_reads}
@@ -39,6 +43,9 @@ rule trim_paired_end_reads:
 		j="results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.json"
 	conda:"environment_argfinder.yaml"
 	benchmark: "results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.bench"
+	envmodules:
+		"tools",
+		"fastp/0.23.2"
 	shell:
 		"""
 		fastp -i {input.in1} -I {input.in2} -o {output.out1} -O {output.out2} --merge --merged_out {params.out_merge} --unpaired1 {output.singleton} --unpaired2 {output.singleton} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -j {params.j}
@@ -65,6 +72,9 @@ rule kma_paired_end_reads_mOTUs:
 		kma_params="-mem_mode -ef -1t1 -apm p -oa -matrix"
 	conda:"environment_argfinder.yaml"
 	benchmark: "results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.bench"
+	envmodules:
+		"tools",
+		"kma/1.4.12a"
 	shell:
 		"""
 		kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params}
@@ -97,6 +107,13 @@ rule kma_paired_end_reads_panRes:
 		mapstat_table="prerequisites/mapstat_filtering/pan_master_gene_tbl.tsv"
 	conda:"environment_argfinder.yaml"
 	benchmark:"results/kma_panres/paired_end/{paired_reads}/{paired_reads}.bench"
+	envmodules:
+		"tools",
+		"kma/1.4.12a",
+		"samtools/1.16",
+		"gcc/9.4.0",
+		"intel/perflibs/64/2020_update2",
+		"R/4.3.0"
 	shell:
 		"""
 		kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bam
@@ -119,6 +136,9 @@ rule mash_sketch_paired_end_reads:
 		check_file_mash="results/mash_sketch/paired_end/{paired_reads}/{paired_reads}_check_file_mash.txt"
 	conda:"environment_argfinder.yaml"
 	benchmark: "results/mash_sketch/paired_end/{paired_reads}/{paired_reads}.bench"
+	envmodules:
+		"tools",
+		"mash/2.3"
 	shell:
 		"""
 		cat {input.read_1} {input.read_2} {input.read_3} | mash sketch -k 31 -s 10000 -I {wildcards.paired_reads} -C Paired -r -o {output.out} -
@@ -146,6 +166,12 @@ rule arg_extender_paired_reads:
 		db="prerequisites/db_panres/pan.fa"
 	conda:"environment_argfinder.yaml"
 	benchmark:"results/argextender/paired_end/{paired_reads}/{paired_reads}.bench"
+	envmodules:
+		"tools",
+		"kma/1.4.12a",
+		"anaconda3/2022.10",
+		"spades/3.15.5",
+		"fqgrep/0.0.3"
 	shell:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 
