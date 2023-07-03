@@ -8,9 +8,10 @@ rule download_single_end_reads:
 	params:
 		outdir="results/raw_reads/single_end",
 		type="fastq"
+	benchmark: "results/raw_reads/single_end/{single_reads}/{single_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/raw_reads/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.single_reads}
+		python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.single_reads}
 		touch {output.check_file_raw}
 		"""
 
@@ -31,9 +32,10 @@ rule trim_single_end_reads:
 		h="results/trimmed_reads/single_end/{single_reads}/{single_reads}.html",
 		j="results/trimmed_reads/single_end/{single_reads}/{single_reads}.json"
 	conda:"environment_argfinder.yaml"
+	benchmark:"results/trimmed_reads/single_end/{single_reads}/{single_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/trimmed_reads/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench fastp -i {input} -o {output} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -j {params.j}
+		fastp -i {input} -o {output} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -j {params.j}
 		touch {output.check_file_trim}
 		"""
 
@@ -48,13 +50,14 @@ rule kma_single_end_reads_mOTUs:
 		"results/kma_mOTUs/single_end/{single_reads}/{single_reads}.mapstat",
 		check_file_kma_mOTUs="results/kma_mOTUs/single_end/{single_reads}/{single_reads}_check_file_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/mOTUs_20221205/db_mOTU_20221205",
+		db="prerequisites/db_motus/db_mOTUs",
 		outdir="results/kma_mOTUs/single_end/{single_reads}/{single_reads}",
 		kma_params="-mem_mode -ef -1t1 -apm p -oa -matrix"
 	conda:"environment_argfinder.yaml"
+	benchmark:"results/kma_mOTUs/single_end/{single_reads}/{single_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input} -o {params.outdir} -t_db {params.db} {params.kma_params}
+		kma -i {input} -o {params.outdir} -t_db {params.db} {params.kma_params}
 		rm results/kma_mOTUs/single_end/{wildcards.single_reads}/*.aln
 		gzip -f results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fsa
 		touch {output.check_file_kma_mOTUs}
@@ -74,16 +77,17 @@ rule kma_single_end_reads_panRes:
 		"results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat.filtered",
 		check_file_kma_panres="results/kma_panres/single_end/{single_reads}/{single_reads}_check_file_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/panres_20230420/panres_20230420",
+		db="prerequisites/db_panres/panres",
 		outdir="results/kma_panres/single_end/{single_reads}/{single_reads}",
 		kma_params="-ef -1t1 -nf -vcf -sam -matrix",
 		mapstat="results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat",
 		mapstat_filtered="results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat.filtered",
 		mapstat_table="prerequisites/mapstat_filtering/pan_master_gene_tbl.tsv"
 	conda:"environment_argfinder.yaml"
+	benchmark:"results/kma_panres/single_end/{single_reads}/{single_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input} -o {params.outdir} -t_db {params.db} {params.kma_params} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bam
+		kma -i {input} -o {params.outdir} -t_db {params.db} {params.kma_params} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bam
 		rm results/kma_panres/single_end/{wildcards.single_reads}/*.aln
 		gzip -f results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fsa
 		Rscript prerequisites/mapstat_filtering/mapstatFilters.R -i {params.mapstat} -o {params.mapstat_filtered} -r {params.mapstat_table}
@@ -100,9 +104,10 @@ rule mash_sketch_single_end_reads:
 		out="results/mash_sketch/single_end/{single_reads}/{single_reads}.trimmed.fastq.msh",
 		check_file_mash="results/mash_sketch/single_end/{single_reads}/{single_reads}_check_file_mash.txt"
 	conda:"environment_argfinder.yaml"
+	benchmark:"results/mash_sketch/single_end/{single_reads}/{single_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/mash_sketch/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench mash sketch -k 31 -s 10000 -o {output.out} -r {input}
+		mash sketch -k 31 -s 10000 -o {output.out} -r {input}
 		touch {output.check_file_mash}
 		"""
 
@@ -122,13 +127,14 @@ rule arg_extender_single_reads:
 	params:
 		seed="-1",
 		temp_dir="results/argextender/single_end/{single_reads}/{single_reads}",
-		db="/home/databases/metagenomics/db/panres_20230420/pan.fa"
+		db="prerequisites/db_panres/pan.fa"
 	conda:"environment_argfinder.yaml"
+	benchmark: "results/argextender/single_end/{single_reads}/{single_reads}.bench"
 	shell:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 
 		then
-			/usr/bin/time -v --output=results/argextender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.seed} {params.temp_dir} {params.db} {input.read_1}
+			perl prerequisites/ARGextender/targetAsm.pl {params.seed} {params.temp_dir} {params.db} {input.read_1}
 			gzip -f results/argextender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta
 			gzip -f results/argextender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.gfa
 			touch {output.check_file_seed}

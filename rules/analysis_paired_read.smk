@@ -9,9 +9,11 @@ rule download_paired_end_reads:
 	params:
 		outdir="results/raw_reads/paired_end",
 		type="fastq"
+	benchmark:
+		"results/raw_reads/paired_end/{paired_reads}/{paired_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/raw_reads/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.paired_reads}
+		python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.paired_reads}
 		touch {output.check_file_raw}
 		"""
 
@@ -36,9 +38,10 @@ rule trim_paired_end_reads:
 		h="results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.html",
 		j="results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.json"
 	conda:"environment_argfinder.yaml"
+	benchmark: "results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/trimmed_reads/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench fastp -i {input.in1} -I {input.in2} -o {output.out1} -O {output.out2} --merge --merged_out {params.out_merge} --unpaired1 {output.singleton} --unpaired2 {output.singleton} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -j {params.j}
+		fastp -i {input.in1} -I {input.in2} -o {output.out1} -O {output.out2} --merge --merged_out {params.out_merge} --unpaired1 {output.singleton} --unpaired2 {output.singleton} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -j {params.j}
 		cat {params.out_merge} >> {output.singleton}
 		rm {params.out_merge}
 		touch {output.check_file_trim}
@@ -57,13 +60,14 @@ rule kma_paired_end_reads_mOTUs:
 		"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.mapstat",
 		check_file_kma_mOTUs="results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}_check_file_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/mOTUs_20221205/db_mOTU_20221205",
+		db="prerequisites/db_motus/db_mOTUs",
 		outdir="results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}",
 		kma_params="-mem_mode -ef -1t1 -apm p -oa -matrix"
 	conda:"environment_argfinder.yaml"
+	benchmark: "results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_mOTUs/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params}
+		kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params}
 		rm results/kma_mOTUs/paired_end/{wildcards.paired_reads}/*.aln
 		gzip -f results/kma_mOTUs/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fsa
 		touch {output.check_file_kma_mOTUs}
@@ -85,16 +89,17 @@ rule kma_paired_end_reads_panRes:
 		"results/kma_panres/paired_end/{paired_reads}/{paired_reads}.mapstat.filtered",
 		check_file_kma_panres="results/kma_panres/paired_end/{paired_reads}/{paired_reads}_check_file_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/panres_20230420/panres_20230420",
+		db="prerequisites/db_panres/panres",
 		outdir="results/kma_panres/paired_end/{paired_reads}/{paired_reads}",
 		kma_params="-ef -1t1 -nf -vcf -sam -matrix",
 		mapstat="results/kma_panres/paired_end/{paired_reads}/{paired_reads}.mapstat",
 		mapstat_filtered="results/kma_panres/paired_end/{paired_reads}/{paired_reads}.mapstat.filtered",
 		mapstat_table="prerequisites/mapstat_filtering/pan_master_gene_tbl.tsv"
 	conda:"environment_argfinder.yaml"
+	benchmark:"results/kma_panres/paired_end/{paired_reads}/{paired_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bam
+		kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bam
 		rm results/kma_panres/paired_end/{wildcards.paired_reads}/*.aln
 		gzip -f results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fsa
 		Rscript prerequisites/mapstat_filtering/mapstatFilters.R -i {params.mapstat} -o {params.mapstat_filtered} -r {params.mapstat_table}
@@ -113,9 +118,10 @@ rule mash_sketch_paired_end_reads:
 		out="results/mash_sketch/paired_end/{paired_reads}/{paired_reads}.trimmed.fastq.msh",
 		check_file_mash="results/mash_sketch/paired_end/{paired_reads}/{paired_reads}_check_file_mash.txt"
 	conda:"environment_argfinder.yaml"
+	benchmark: "results/mash_sketch/paired_end/{paired_reads}/{paired_reads}.bench"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/mash_sketch/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench cat {input.read_1} {input.read_2} {input.read_3} | mash sketch -k 31 -s 10000 -I {wildcards.paired_reads} -C Paired -r -o {output.out} -
+		cat {input.read_1} {input.read_2} {input.read_3} | mash sketch -k 31 -s 10000 -I {wildcards.paired_reads} -C Paired -r -o {output.out} -
 		touch {output.check_file_mash}
 		"""
 
@@ -137,13 +143,14 @@ rule arg_extender_paired_reads:
 	params:
 		seed="-1",
 		temp_dir="results/argextender/paired_end/{paired_reads}/{paired_reads}",
-		db="/home/databases/metagenomics/db/panres_20230420/pan.fa"
+		db="prerequisites/db_panres/pan.fa"
 	conda:"environment_argfinder.yaml"
+	benchmark:"results/argextender/paired_end/{paired_reads}/{paired_reads}.bench"
 	shell:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 
 		then 
-			/usr/bin/time -v --output=results/argextender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.seed} {params.temp_dir} {params.db} {input.read_1} {input.read_2} {input.read_3}
+			perl prerequisites/ARGextender/targetAsm.pl {params.seed} {params.temp_dir} {params.db} {input.read_1} {input.read_2} {input.read_3}
 			gzip -f results/argextender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta
 			gzip -f results/argextender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.gfa
 			touch {output.check_file_seed}

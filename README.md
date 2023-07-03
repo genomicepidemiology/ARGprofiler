@@ -35,22 +35,19 @@ Since ARGfinder is a Snakemake pipeline, the user should install Snakemake workf
 There are some prerequisites for using ARGfinder:
 
 * The user needs to download two reference databases (mOTUs and PanRes), place them in the correct directory, and then index them with KMA. 
-
-	* Create mOTUs and PanRes subdirectories in the ``` prerequisites ``` directory.
-
-	* For ``` mOTUs``` the user has to download the database from Zenodo, unzip it, and then index it with KMA:
-		1. Move to the mOTUs directory in the ``` prerequisites ``` directory
+	* For ``` mOTUs``` the user has to download the database from Zenodo into `prerequisites/db_motus`, unzip it, and then index it with KMA:
+		1. `cd prerequisites/db_motus`
 		2. `wget https://zenodo.org/record/5140350/files/db_mOTU_v3.0.1.tar.gz`
 		3. `tar -xzf db_mOTU_v3.0.1.tar.gz`
-		4. `kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTU` (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
+		4. `kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTUs` (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
-	* For ``` PanRes``` the user has to download the database from Zenodo, unzip it, and then index it with KMA:
-		1. Move to PanRes directory in the ``` prerequisites ``` directory
+	* For ``` PanRes``` the user has to download the database from Zenodo into `prerequisites/db_panres`, unzip it, and then index it with KMA:
+		1. `cd prerequisites/db_panres`
 		2. `wget https://zenodo.org/record/`
 		3. `tar -xzf` 
 		4. `kma index -i pan.fa -o panres_db` (For KMA instructions, you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
 
-* The user needs to clone the enaBrowserTools repository and place it in the ``` prerequisites ``` directory. enaBrowserTools can be found <a href="https://github.com/enasequence/enaBrowserTools">here</a>
+* The user needs to clone the [enaBrowserTools](https://github.com/enasequence/enaBrowserTools) repository and place it in the ``` prerequisites ``` directory:  `git clone https://github.com/enasequence/enaBrowserTools.git prerequisites/enaBrowserTools`
 
 * The pipeline makes use of Snakemake profiles to specify the configuration of the pipeline. The required flags are specified in the files of the ``` profile_argfinder ``` directory.
 	
@@ -58,7 +55,7 @@ There are some prerequisites for using ARGfinder:
 
 ## Input
 
-ARGfinder takes as input a JSON file with the following format:
+ARGfinder takes as input a JSON file named [`input.json`](input.json) in the following format:
 
 ```
 {run_accession:{"type":READ_TYPE},"run_accession":{"type":READ_TYPE}}
@@ -75,13 +72,26 @@ The user can also opt to specify the name of the input file in the Snakefile (wi
 
 ## Running ARGfinder
 
-To run ARGfinder, the user should execute the following command:
+### HPC
+To run ARGfinder on a HPC with a queuing system, the user should execute the following command:
 
 ```
 snakemake --profile profile_argfinder
 ```
 
-Reminder: execution of the pipeline requires installing the Snakemake workflow management beforehand.
+### Locally
+While we have designed ARGfinder to run in a HPC environment (specifically [Computerome](https://www.computerome.dk/)), it is possible to run the pipeline locally. Therefore, we recommend to create a mamba environment as follows:
+```{bash}
+mamba env create --name argfinder --file rules/environment_argfinder.yaml
+```
+
+Then activate the environment and run Snakemake:
+```{bash}
+mamba activate argfinder
+snakemake --use-conda -c1
+```
+The `-c1` flag should be changed to reflect the number of cores for Snakemake to use.
+
 
 ## Output
 
