@@ -75,10 +75,9 @@ The user can also opt to specify the name of the input file in the Snakefile (wi
 The user has the option to run the pipeline either on an HPC or locally. On HPC we provide the option of executing the workflow either using environment modules or conda packages. 
 
 ### HPC
-To run ARGfinder on a HPC with a queuing system, the user should execute the following command:
-
 The user should specify the preferable option for executing the pipeline in the config file (If conda enviroment is chosen then ```use-conda:True```, else if environment modules is chosen then remove ```use-conda:True``` and add ```use-envmodules:True```
 
+To run ARGfinder on a HPC with a queuing system, the user should execute the following command:
 
 ```
 snakemake --profile profile_argfinder
