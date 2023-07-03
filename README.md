@@ -104,15 +104,15 @@ The user should also remove the first two lines (cluster and cluster-config) in 
 When successfully executed, ARGfinder creates a directory named ``` results ```, where the user can find all the available results from all the analysis steps (results are separated into single and paired-reads results). More specifically:
 
 
-* ``` raw_reads ``` directory contains all the downloaded sequencing datasets + benchmarking files.
-* ``` trimmed_reads ``` directory contains all the trimmed sequencing datasets + benchmarking files.
-* ``` kma_mOTUs ``` directory contains all the alignment result files with the mOTUs database + benchmarking files.
+* ``` raw_reads ``` directory contains all the downloaded sequencing datasets.
+* ``` trimmed_reads ``` directory contains all the trimmed sequencing datasets.
+* ``` kma_mOTUs ``` directory contains all the alignment result files with the mOTUs database.
 	* res file = A result overview giving the most common statistics for each mapped template.
 	* mapstat file = Summarized read abundancies.
 	* fsa.gz = The consensus sequences are drawn from the alignments (zipped).
 	* mat.gz = Base counts on each position in each template (zipped).
 	* vcf.gz = Sequence variations.
-* ``` kma_panres ``` directory contains all the alignment result files with the PanRes database + benchmarking files.
+* ``` kma_panres ``` directory contains all the alignment result files with the PanRes database.
 	* res file = A result overview giving the most common statistics for each mapped template.
 	* mapstat file = Summarized read abundancies.
 	* mapstat.filtered file = Filtered summarized read abundancies (Learn more about our filtering scheme here).
@@ -120,12 +120,12 @@ When successfully executed, ARGfinder creates a directory named ``` results ```,
 	* fsa.gz = The consensus sequences are drawn from the alignments (zipped).
 	* mat.gz = Base counts on each position in each template (zipped).
 	* vcf.gz = Sequence variations.
-* ``` argextender ``` directory for extracting the genomic flanking regions around ARGs + benchmarking files.
+* ``` argextender ``` directory for extracting the genomic flanking regions around ARGs.
 	* fasta file = fasta file with the extracted flanking sequences.
 	* frag.gz file = overview file that contains information on the following: Contig_seq, Number of matching ARGs, Alignment score, Start pos., End pos., Template name, Contig name.
 	* frag_raw.gz = Similar file with fra.gz but with all ARGs that can align to any of the contigs. Read, Number of equally well mapping templates, Mapping score, Start pos., End pos. (w.r.t. template), Choosen template(s).
 	* gfa.gz =  Sequence graph.
-* ``` Mash ``` directory contains the mash sketches for each sequecning dataset + benchmarking files.
+* ``` Mash ``` directory contains the mash sketches for each sequecning dataset.
 
 ## Tips and Tricks
 
