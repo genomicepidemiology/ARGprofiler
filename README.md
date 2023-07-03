@@ -126,7 +126,7 @@ When successfully executed, ARGfinder creates a directory named ``` results ```,
 * To save space ARGfinder removes the raw and trimmed reads from each sample upon successful competition of all rules. If these files are needed for some reason, the user should comment out the last 4 lines in the Snakefile
 * Besides the regular output files, the kma_PanRes rule also outputs a BAM file.
 * ARGextender will, by default, run until there is nothing more to extend.
-* The user should create a ``` logs ``` directory in the main directory if they wish to have log files for each job.
+* The user should create a ``` logs ``` directory in the main directory. Log files for each job will be placed there.
 
 ## Citation
 
