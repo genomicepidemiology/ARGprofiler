@@ -9,10 +9,6 @@ rule download_single_end_reads:
 		outdir="results/raw_reads/single_end",
 		type="fastq"
 	benchmark: "results/raw_reads/single_end/{single_reads}/{single_reads}.bench"
-	envmodules:
-		"tools",
-		"anaconda3/2022.10",
-		"enabrowsertools/1.1.0"
 	shell:
 		"""
 		python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.single_reads}

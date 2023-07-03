@@ -11,10 +11,6 @@ rule download_paired_end_reads:
 		type="fastq"
 	benchmark:
 		"results/raw_reads/paired_end/{paired_reads}/{paired_reads}.bench"
-	envmodules:
-		"tools",
-		"anaconda3/2022.10",
-		"enabrowsertools/1.1.0"
 	shell:
 		"""
 		python3 prerequisites/enaBrowserTools/python3/enaDataGet.py -f {params.type} -d {params.outdir} {wildcards.paired_reads}
