@@ -5,7 +5,7 @@ A tool for large-scale analysis of antimicrobial resistance genes (ARGs) and the
 
 ## Introduction
 
-ARGfinder is a newly developed Snakemake pipeline designed to analyze read distances, abundances, and genomic flanking regions of ARGs in metagenomic sequencing data. It has been adapted to work for short-read sequencing datasets. The pipeline also includes the recently made PanRes database, a combined collection of current ARG databases, and ARGextender, an assembly tool for extending the genomic flanking region around genes of interest.
+ARGfinder is a newly developed Snakemake pipeline designed to analyze ARGs' read distances, abundances, and genomic flanking regions in metagenomic sequencing data. It has been adapted to work for short-read sequencing datasets. The pipeline also includes the recently made PanRes database, a combined collection of current ARG databases, and ARGextender, an assembly tool for extending the genomic flanking region around genes of interest.
 
 ARGfinder uses the following tools:
 
@@ -34,7 +34,7 @@ Since ARGfinder is a Snakemake pipeline, the user should install Snakemake workf
 
 There are some prerequisites for using ARGfinder:
 
-* The user needs to download two reference databases (mOTUs and PanRes), place them in the correct directory, and then index them with KMA. 
+* The user must download two reference databases (mOTUs and PanRes), place them in the correct directory, and then index them with KMA. 
 	* For ``` mOTUs``` the user has to download the database from Zenodo into `prerequisites/db_motus`, unzip it, and then index it with KMA:
 		1. `cd prerequisites/db_motus`
 		2. `wget https://zenodo.org/record/5140350/files/db_mOTU_v3.0.1.tar.gz`
@@ -72,25 +72,25 @@ The user can also opt to specify the name of the input file in the Snakefile (wi
 
 ## Running ARGfinder
 
-The user has the option to run the pipeline either on an HPC or locally. On HPC we provide the option of executing the workflow either using environment modules or conda packages. 
+The user has the option to run the pipeline either on an HPC or locally. For running on HPC, we provide the option of executing the workflow using environment modules or conda packages. 
 
 ### HPC
-The user should specify the preferable option for executing the pipeline in the config file (If conda enviroment is chosen then keep ```use-conda:True```, else if environment modules is chosen then remove ```use-conda:True``` and add ```use-envmodules:True```
+The user should specify the preferable option for executing the pipeline in the config file. If wanting to use a conda environment, keep ```use-conda:True```; otherwise, replace with ```use-envmodules:True```.
 
-To run ARGfinder on a HPC with a queuing system, the user should execute the following command:
+To run ARGfinder on an HPC with a queuing system, the user should execute the following command:
 
 ```
 snakemake --profile profile_argfinder
 ```
 
 ### Locally
-While we have designed ARGfinder to run in a HPC environment (specifically [Computerome](https://www.computerome.dk/)), it is possible to run the pipeline locally. Therefore, we recommend to create a mamba environment as follows:
+While we have designed ARGfinder to run in an HPC environment (specifically [Computerome](https://www.computerome.dk/)), it is possible to run the pipeline locally. Therefore, we recommend creating a mamba environment as follows:
 
 ```{bash}
 mamba env create --name argfinder --file rules/environment_argfinder.yaml
 ```
 
-Since we are not executing ARGfinder in HPC the user should remove the following flag from the config file: ```cluster, cluster-config``` and add the following flag: ```cores``` (The ```cores``` flag should be changed to reflect the number of cores for Snakemake to use). 
+Since we are not executing ARGfinder in HPC, the user should remove the following flag from the config file: ```cluster, cluster-config``` and add the following flag: ```cores``` (The ```cores``` flag should be changed to reflect the number of cores for Snakemake to use). 
 
 Then activate the environment and run Snakemake:
 
@@ -107,29 +107,29 @@ When successfully executed, ARGfinder creates a directory named ``` results ```,
 * ``` raw_reads ``` directory contains all the downloaded sequencing datasets.
 * ``` trimmed_reads ``` directory contains all the trimmed sequencing datasets.
 * ``` kma_mOTUs ``` directory contains all the alignment result files with the mOTUs database.
-	* res file = A result overview giving the most common statistics for each mapped template.
-	* mapstat file = Summarized read abundancies.
-	* fsa.gz = The consensus sequences are drawn from the alignments (zipped).
-	* mat.gz = Base counts on each position in each template (zipped).
-	* vcf.gz = Sequence variations.
+	* .res = A result overview giving the most common statistics for each mapped template.
+	* .mapstat = Summarized read abundances.
+	* .fsa.gz = The consensus sequences are drawn from the alignments (zipped).
+	* .mat.gz = Base counts on each position in each template (zipped).
+	* .vcf.gz = Sequence variations.
 * ``` kma_panres ``` directory contains all the alignment result files with the PanRes database.
-	* res file = A result overview giving the most common statistics for each mapped template.
-	* mapstat file = Summarized read abundancies.
-	* mapstat.filtered file = Filtered summarized read abundancies (Learn more about our filtering scheme here).
-	* bam file = Alignment information (compressed).
-	* fsa.gz = The consensus sequences are drawn from the alignments (zipped).
-	* mat.gz = Base counts on each position in each template (zipped).
-	* vcf.gz = Sequence variations.
+	* .res = A result overview giving the most common statistics for each mapped template.
+	* .mapstat = Summarized read abundances.
+	* .mapstat.filtered = Filtered summarized read abundances (Learn more about our filtering scheme here).
+	* .bam = Alignment information (compressed).
+	* .fsa.gz = The consensus sequences are drawn from the alignments (zipped).
+	* .mat.gz = Base counts on each position in each template (zipped).
+	* .vcf.gz = Sequence variations.
 * ``` argextender ``` directory for extracting the genomic flanking regions around ARGs.
-	* fasta file = fasta file with the extracted flanking sequences.
-	* frag.gz file = overview file that contains information on the following: Contig_seq, Number of matching ARGs, Alignment score, Start pos., End pos., Template name, Contig name.
-	* frag_raw.gz = Similar file with fra.gz but with all ARGs that can align to any of the contigs. Read, Number of equally well mapping templates, Mapping score, Start pos., End pos. (w.r.t. template), Choosen template(s).
+	* .fasta = fasta file with the extracted flanking sequences.
+	* .frag.gz = overview file that contains information on the following: Contig_seq, Number of matching ARGs, Alignment score, Start pos., End pos., Template name, Contig name.
+	* .frag_raw.gz = Similar file with fra.gz but with all ARGs that can align to any of the contigs. Read, Number of equally well mapping templates, Mapping score, Start pos., End pos. (w.r.t. template), Choosen template(s).
 	* gfa.gz =  Sequence graph.
-* ``` Mash ``` directory contains the mash sketches for each sequecning dataset.
+* ``` Mash ``` directory contains the mash sketches for each sequencing dataset.
 
 ## Tips and Tricks
 
-* To save space ARGfinder removes the raw and trimmed reads from each sample upon successful competition of all rules. If these files are needed for some reason, the user should comment out the last 4 lines in the Snakefile
+* To save space ARGfinder removes the raw and trimmed reads from each sample upon successful competition of all rules. If these files are needed for some reason, the user should comment out the last four lines in the Snakefile
 * Besides the regular output files, the kma_PanRes rule also outputs a BAM file.
 * ARGextender will, by default, run until there is nothing more to extend.
 * The user should create a ``` logs ``` directory in the main directory. Log files for each job will be placed there.
