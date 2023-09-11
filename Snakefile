@@ -1,7 +1,7 @@
 import json
 import os
 
-configfile: "rules/environment_argfinder.yaml"
+configfile: "rules/environment_argprofiler.yaml"
 
 include: "rules/analysis_paired_read.smk"
 include: "rules/analysis_single_read.smk"

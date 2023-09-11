@@ -1,4 +1,4 @@
-name: argfinder
+name: argprofiler
 channels:
  - conda-forge
  - bioconda
