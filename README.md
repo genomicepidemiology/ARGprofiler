@@ -143,3 +143,4 @@ We welcome any comments, bug reports, and suggestions, as they will help us impr
 =======
 We welcome any comments, bug reports, and suggestions, as they will help us improve ARGprofiler. You can leave comments and bug reports in the [repository issue tracker](https://github.com/genomicepidemiology/ARGprofiler/issues) or reach out by e-mail to nipy@food.dtu.dk or hanmar@food.dtu.dk
 >>>>>>> 4119bbf94b930234512287ce620ceeed9b572f71
+ 
