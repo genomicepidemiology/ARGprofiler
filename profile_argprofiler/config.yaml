@@ -1,6 +1,7 @@
 cluster: qsub -W group_list={cluster.proj} -A {cluster.proj} -l nodes=1:ppn={cluster.core},mem={cluster.vmem},walltime={cluster.time} -e logs/{jobid}_snakemake.err -o logs/{jobid}_snakemake.log
-cluster-config: profile_argprofiler/cluster_computerome.json
-use-conda: True
+cluster-config: profile_ava/cluster_computerome.json
+cluster-status: profile_ava/qsub_status.py
+use-envmodules: True
 restart-times: 0
 latency-wait: 200
 jobs: 200
