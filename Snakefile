@@ -6,6 +6,7 @@ include: "rules/analysis_paired_read.smk"
 include: "rules/analysis_single_read.smk"
 include: "rules/analysis_paired_read_local.smk"
 include: "rules/analysis_single_read_local.smk"
+include: "rules/fetch_db.smk"
 
 #Directories of local raw reads
 path_paired_raw_reads="local_reads/paired_reads/*.gz"
@@ -47,6 +48,8 @@ for k,v in new_merge.items():
 
 rule all:
 	input:
+		#expand("prerequisites/panres/panres_genes.fa"),
+		#expand("prerequisites/panres/check_file_index_db.txt"),
 		# expand("results/raw_reads/paired_end/{paired_reads}/{paired_reads}_1.fastq.gz", paired_reads=paired),
 		# expand("results/raw_reads/paired_end/{paired_reads}/{paired_reads}_2.fastq.gz", paired_reads=paired),
 		# expand("results/raw_reads/paired_end/{paired_reads}/{paired_reads}_check_file_raw.txt", paired_reads=paired),

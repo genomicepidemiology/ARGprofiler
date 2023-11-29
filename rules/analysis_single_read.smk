@@ -76,7 +76,8 @@ rule kma_single_end_reads_panRes:
 	Mapping raw single reads for identifying AMR using KMA with panres db
 	"""
 	input: 
-		ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq")
+		ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"),
+		check_file_db="prerequisites/panres/check_file_index_db.txt"
 	output:
 		"results/kma_panres/single_end/{single_reads}/{single_reads}.res",
 		"results/kma_panres/single_end/{single_reads}/{single_reads}.mat.gz",
@@ -85,7 +86,7 @@ rule kma_single_end_reads_panRes:
 		"results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat.filtered",
 		check_file_kma_panres="results/kma_panres/single_end/{single_reads}/{single_reads}_check_file_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/panres_20230420/panres_20230420",
+		db="prerequisites/panres/pan_db",
 		outdir="results/kma_panres/single_end/{single_reads}/{single_reads}",
 		kma_params="-ef -1t1 -nf -vcf -sam -matrix",
 		mapstat="results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat",

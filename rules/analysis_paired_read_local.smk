@@ -71,7 +71,8 @@ rule kma_paired_end_reads_panRes_local:
 	input: 
 		read_1="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_1.trimmed_local.fastq",
 		read_2="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_2.trimmed_local.fastq",
-		read_3="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_singleton_local.trimmed.fastq"
+		read_3="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_singleton_local.trimmed.fastq",
+		check_file_db="prerequisites/panres/check_file_index_db.txt"
 	output:
 		"results/kma_panres/paired_end/{local_paired_reads}/{local_paired_reads}_local.res",
 		"results/kma_panres/paired_end/{local_paired_reads}/{local_paired_reads}_local.mat.gz",
@@ -80,7 +81,7 @@ rule kma_paired_end_reads_panRes_local:
 		"results/kma_panres/paired_end/{local_paired_reads}/{local_paired_reads}_local.mapstat.filtered",
 		check_file_kma_panres="results/kma_panres/paired_end/{local_paired_reads}/{local_paired_reads}_check_file_local_kma.txt"
 	params:
-		db="/home/databases/metagenomics/db/panres_20230420/panres_20230420",
+		db="prerequisites/panres/pan_db",
 		outdir="results/kma_panres/paired_end/{local_paired_reads}/{local_paired_reads}",
 		kma_params="-ef -1t1 -nf -vcf -sam -matrix",
 		mapstat="results/kma_panres/paired_end/{local_paired_reads}/{local_paired_reads}_local.mapstat",
