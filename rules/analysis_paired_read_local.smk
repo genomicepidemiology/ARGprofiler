@@ -38,7 +38,8 @@ rule kma_paired_end_reads_mOTUs_local:
 	input: 
 		read_1="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_1.trimmed_local.fastq",
 		read_2="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_2.trimmed_local.fastq",
-		read_3="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_singleton_local.trimmed.fastq"
+		read_3="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_singleton_local.trimmed.fastq",
+		check_file_db_mOTUs="prerequisites/mOTUs/check_file_index_db_mOTUs.txt"
 	output:
 		"results/kma_mOTUs/paired_end/{local_paired_reads}/{local_paired_reads}_local.res",
 		"results/kma_mOTUs/paired_end/{local_paired_reads}/{local_paired_reads}_local.mapstat",
@@ -72,7 +73,7 @@ rule kma_paired_end_reads_panRes_local:
 		read_1="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_1.trimmed_local.fastq",
 		read_2="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_2.trimmed_local.fastq",
 		read_3="results/trimmed_reads/paired_end/{local_paired_reads}/{local_paired_reads}_singleton_local.trimmed.fastq",
-		check_file_db="prerequisites/panres/check_file_index_db.txt"
+		check_file_db_panres="prerequisites/panres/check_file_index_db_panres.txt"
 	output:
 		"results/kma_panres/paired_end/{local_paired_reads}/{local_paired_reads}_local.res",
 		"results/kma_panres/paired_end/{local_paired_reads}/{local_paired_reads}_local.mat.gz",
@@ -244,7 +245,7 @@ rule ppr_meta_paired_reads_local:
 			gzip -d {input}
 			cd results/ppr_meta/paired_end/{wildcards.local_paired_reads}
    			ln -s ../../../../prerequisites/ppr_meta/* .
-			PPR_Meta ../../../seed_extender/paired_end/{wildcards.local_paired_reads}/{wildcards.local_paired_reads}_local.fasta {wildcards.local_paired_reads}_local.csv -t {params.threshold}
+			/usr/bin/time -v --output={wildcards.local_paired_reads}.bench PPR_Meta ../../../seed_extender/paired_end/{wildcards.local_paired_reads}/{wildcards.local_paired_reads}_local.fasta {wildcards.local_paired_reads}_local.csv -t {params.threshold}
 			rm model* predict.py
 			gzip ../../../seed_extender/paired_end/{wildcards.local_paired_reads}/{wildcards.local_paired_reads}_local.fasta 
 			touch {wildcards.local_paired_reads}_check_file_local_ppr.txt

@@ -30,7 +30,8 @@ rule kma_single_end_reads_mOTUs_local:
 	Mapping raw single local reads for identifying AMR using KMA with mOTUs db
 	"""
 	input: 
-		"results/trimmed_reads/single_end/{local_single_reads}/{local_single_reads}.trimmed_local.fastq"
+		"results/trimmed_reads/single_end/{local_single_reads}/{local_single_reads}.trimmed_local.fastq",
+		check_file_db_mOTUs="prerequisites/mOTUs/check_file_index_db_mOTUs.txt"
 	output:
 		"results/kma_mOTUs/single_end/{local_single_reads}/{local_single_reads}_local.res",
 		"results/kma_mOTUs/single_end/{local_single_reads}/{local_single_reads}_local.mapstat",
@@ -62,7 +63,7 @@ rule kma_single_end_reads_panRes_local:
 	"""
 	input: 
 		"results/trimmed_reads/single_end/{local_single_reads}/{local_single_reads}.trimmed_local.fastq",
-		check_file_db="prerequisites/panres/check_file_index_db.txt"
+		check_file_db_panres="prerequisites/panres/check_file_index_db_panres.txt"
 	output:
 		"results/kma_panres/single_end/{local_single_reads}/{local_single_reads}_local.res",
 		"results/kma_panres/single_end/{local_single_reads}/{local_single_reads}_local.mat.gz",
@@ -220,7 +221,7 @@ rule ppr_meta_single_reads_local:
 			gzip -d {input}
 			cd results/ppr_meta/single_end/{wildcards.local_single_reads}
    			ln -s ../../../../prerequisites/ppr_meta/* .
-			PPR_Meta ../../../seed_extender/single_end/{wildcards.local_single_reads}/{wildcards.local_single_reads}_local.fasta {wildcards.local_single_reads}_local.csv -t {params.threshold}
+			/usr/bin/time -v --output={wildcards.local_single_reads}.bench PPR_Meta ../../../seed_extender/single_end/{wildcards.local_single_reads}/{wildcards.local_single_reads}_local.fasta {wildcards.local_single_reads}_local.csv -t {params.threshold}
 			rm model* predict.py
 			gzip ../../../seed_extender/single_end/{wildcards.local_single_reads}/{wildcards.local_single_reads}_local.fasta 
 			touch {wildcards.local_single_reads}_check_file_local_ppr.txt

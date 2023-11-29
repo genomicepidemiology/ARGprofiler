@@ -48,7 +48,8 @@ rule kma_single_end_reads_mOTUs:
 	Mapping raw single reads for identifying AMR using KMA with mOTUs db
 	"""
 	input: 
-		ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq")
+		ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"),
+		check_file_db_mOTUs="prerequisites/mOTUs/check_file_index_db_mOTUs.txt"
 	output:
 		"results/kma_mOTUs/single_end/{single_reads}/{single_reads}.res",
 		"results/kma_mOTUs/single_end/{single_reads}/{single_reads}.mapstat",
@@ -77,7 +78,7 @@ rule kma_single_end_reads_panRes:
 	"""
 	input: 
 		ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"),
-		check_file_db="prerequisites/panres/check_file_index_db.txt"
+		check_file_db="prerequisites/panres/check_file_index_db_panres.txt"
 	output:
 		"results/kma_panres/single_end/{single_reads}/{single_reads}.res",
 		"results/kma_panres/single_end/{single_reads}/{single_reads}.mat.gz",
@@ -224,7 +225,7 @@ rule ppr_meta_single_reads:
 			gzip -d {input}
 			cd results/ppr_meta/single_end/{wildcards.single_reads}
    			ln -s ../../../../prerequisites/ppr_meta/* .
-			PPR_Meta ../../../seed_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta {wildcards.single_reads}.csv -t {params.threshold}
+			/usr/bin/time -v --output={wildcards.single_reads}.bench PPR_Meta ../../../seed_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta {wildcards.single_reads}.csv -t {params.threshold}
 			rm model* predict.py
 			gzip ../../../seed_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta 
 			touch {wildcards.single_reads}_check_file_ppr.txt

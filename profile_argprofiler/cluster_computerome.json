@@ -6,6 +6,13 @@
         "vmem" : "20G",
         "proj" : "dtu_00056"
     },
+    "index_db_mOTUs" :
+    {
+        "core" : "20:thinnode",
+        "time" : "02:00:00",
+        "vmem" : "40G",
+        "proj" : "dtu_00056"
+    },
     "download_paired_end_reads" :
     {
         "core" : "20:thinnode",

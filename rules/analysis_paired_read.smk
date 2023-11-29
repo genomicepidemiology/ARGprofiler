@@ -59,7 +59,8 @@ rule kma_paired_end_reads_mOTUs:
 	input: 
 		read_1=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_1.trimmed.fastq"),
 		read_2=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_2.trimmed.fastq"),
-		read_3=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_singleton.trimmed.fastq")
+		read_3=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_singleton.trimmed.fastq"),
+		check_file_db_mOTUs="prerequisites/mOTUs/check_file_index_db_mOTUs.txt"
 	output:
 		"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.res",
 		"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.mapstat",
@@ -90,7 +91,7 @@ rule kma_paired_end_reads_panRes:
 		read_1=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_1.trimmed.fastq"),
 		read_2=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_2.trimmed.fastq"),
 		read_3=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_singleton.trimmed.fastq"),
-		check_file_db="prerequisites/panres/check_file_index_db.txt"
+		check_file_db_panres="prerequisites/panres/check_file_index_db_panres.txt"
 	output:
 		"results/kma_panres/paired_end/{paired_reads}/{paired_reads}.res",
 		"results/kma_panres/paired_end/{paired_reads}/{paired_reads}.mat.gz",
@@ -244,7 +245,7 @@ rule ppr_meta_paired_reads:
 			gzip -d {input}
 			cd results/ppr_meta/paired_end/{wildcards.paired_reads}
    			ln -s ../../../../prerequisites/ppr_meta/* .
-			PPR_Meta ../../../seed_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta {wildcards.paired_reads}.csv -t {params.threshold}
+			/usr/bin/time -v --output={wildcards.paired_reads}.bench PPR_Meta ../../../seed_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta {wildcards.paired_reads}.csv -t {params.threshold}
 			rm model* predict.py
 			gzip ../../../seed_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta 
 			touch {wildcards.paired_reads}_check_file_ppr.txt
