@@ -204,37 +204,6 @@ rule seed_extender_single_reads:
 			touch {output.check_file_seed}
 		fi
 		"""
-rule ppr_meta_single_reads:
-	"""
-	Identifying phages, chromosomes or plasmids with PPR-meta
-	"""
-	input:
-		"results/seed_extender/single_end/{single_reads}/{single_reads}.fasta.gz"
-	output:
-		out1="results/ppr_meta/single_end/{single_reads}/{single_reads}.csv",
-		check_file_ppr="results/ppr_meta/single_end/{single_reads}/{single_reads}_check_file_ppr.txt"
-	params:
-		threshold="0.7"
-	envmodules:
-		"tools",
-		"mcr/R2018a",
-		"ppr-meta/20210413"
-	shell:
-		"""
-		if grep -q . {input}; then
-			gzip -d {input}
-			cd results/ppr_meta/single_end/{wildcards.single_reads}
-   			ln -s ../../../../prerequisites/ppr_meta/* .
-			/usr/bin/time -v --output={wildcards.single_reads}.bench PPR_Meta ../../../seed_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta {wildcards.single_reads}.csv -t {params.threshold}
-			rm model* predict.py
-			gzip ../../../seed_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta 
-			touch {wildcards.single_reads}_check_file_ppr.txt
-    	else
-    		touch {output.out1}
-    		touch {output.check_file_ppr}
-		fi
-		"""
-
 
 rule cleanup_single_end_reads:
 	"""
@@ -247,8 +216,7 @@ rule cleanup_single_end_reads:
 		check_file_kma_panres="results/kma_panres/single_end/{single_reads}/{single_reads}_check_file_kma.txt",
 		check_file_kma_virulence="results/kma_virulence/single_end/{single_reads}/{single_reads}_check_file_kma.txt",
 		check_file_mash="results/mash_sketch/single_end/{single_reads}/{single_reads}_check_file_mash.txt",
-		check_file_seed="results/seed_extender/single_end/{single_reads}/{single_reads}_check_file_seed.txt",
-		check_file_ppr="results/ppr_meta/single_end/{single_reads}/{single_reads}_check_file_ppr.txt"
+		check_file_seed="results/seed_extender/single_end/{single_reads}/{single_reads}_check_file_seed.txt"
 	output:
 		check_file_clean_final1="results/raw_reads/single_end/{single_reads}/check_clean_raw.txt",
 		check_file_clean_final2="results/trimmed_reads/single_end/{single_reads}/check_clean_trim.txt"

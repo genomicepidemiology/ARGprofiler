@@ -111,20 +111,6 @@
         "vmem" : "50G",
         "proj" : "dtu_00056"
     },
-    "ppr_meta_paired_reads" :
-    {
-        "core" : "2:thinnode",
-        "time" : "02:00:00",
-        "vmem" : "20G",
-        "proj" : "dtu_00056"
-    },
-    "ppr_meta_single_reads" :
-    {
-        "core" : "2:thinnode",
-        "time" : "02:00:00",
-        "vmem" : "20G",
-        "proj" : "dtu_00056"
-    },
     "trim_paired_end_reads_local" :
     {
         "core" : "8:thinnode",
@@ -207,20 +193,6 @@
         "core" : "20:thinnode",
         "time" : "40:00:00",
         "vmem" : "50G",
-        "proj" : "dtu_00056"
-    },
-    "ppr_meta_paired_reads_local" :
-    {
-        "core" : "2:thinnode",
-        "time" : "02:00:00",
-        "vmem" : "20G",
-        "proj" : "dtu_00056"
-    },
-    "ppr_meta_single_reads_local" :
-    {
-        "core" : "2:thinnode",
-        "time" : "02:00:00",
-        "vmem" : "20G",
         "proj" : "dtu_00056"
     }
 }

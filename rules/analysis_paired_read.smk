@@ -224,38 +224,6 @@ rule seed_extender_paired_reads:
 		fi
 		"""
 
-rule ppr_meta_paired_reads:
-	"""
-	Identifying phages, chromosomes or plasmids with PPR-meta
-	"""
-	input:
-		"results/seed_extender/paired_end/{paired_reads}/{paired_reads}.fasta.gz"
-	output:
-		out1="results/ppr_meta/paired_end/{paired_reads}/{paired_reads}.csv",
-		check_file_ppr="results/ppr_meta/paired_end/{paired_reads}/{paired_reads}_check_file_ppr.txt"
-	params:
-		threshold="0.7"
-	envmodules:
-		"tools",
-		"mcr/R2018a",
-		"ppr-meta/20210413"
-	shell:
-		"""
-		if grep -q . {input}; then
-			gzip -d {input}
-			cd results/ppr_meta/paired_end/{wildcards.paired_reads}
-   			ln -s ../../../../prerequisites/ppr_meta/* .
-			/usr/bin/time -v --output={wildcards.paired_reads}.bench PPR_Meta ../../../seed_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta {wildcards.paired_reads}.csv -t {params.threshold}
-			rm model* predict.py
-			gzip ../../../seed_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta 
-			touch {wildcards.paired_reads}_check_file_ppr.txt
-    	else
-    		touch {output.out1}
-    		touch {output.check_file_ppr}
-		fi
-		"""
-
-
 rule cleanup_paired_end_reads:
 	"""
 	Removing unwanted files
@@ -267,8 +235,7 @@ rule cleanup_paired_end_reads:
 		check_file_kma_panres="results/kma_panres/paired_end/{paired_reads}/{paired_reads}_check_file_kma.txt",
 		check_file_kma_virulence="results/kma_virulence/paired_end/{paired_reads}/{paired_reads}_check_file_kma.txt",
 		check_file_mash="results/mash_sketch/paired_end/{paired_reads}/{paired_reads}_check_file_mash.txt",
-		check_file_seed="results/seed_extender/paired_end/{paired_reads}/{paired_reads}_check_file_seed.txt",
-		check_file_ppr="results/ppr_meta/paired_end/{paired_reads}/{paired_reads}_check_file_ppr.txt"
+		check_file_seed="results/seed_extender/paired_end/{paired_reads}/{paired_reads}_check_file_seed.txt"
 	output:
 		check_file_clean_final1="results/raw_reads/paired_end/{paired_reads}/check_clean_raw.txt",
 		check_file_clean_final2="results/trimmed_reads/paired_end/{paired_reads}/check_clean_trim.txt"

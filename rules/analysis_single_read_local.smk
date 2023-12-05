@@ -199,34 +199,3 @@ rule seed_extender_single_reads_local:
 			touch {output.check_file_seed}
 		fi
 		"""
-
-rule ppr_meta_single_reads_local:
-	"""
-	Identifying phages, chromosomes or plasmids with PPR-meta on local single end reads
-	"""
-	input:
-		"results/seed_extender/single_end/{local_single_reads}/{local_single_reads}_local.fasta.gz"
-	output:
-		out1="results/ppr_meta/single_end/{local_single_reads}/{local_single_reads}_local.csv",
-		check_file_ppr="results/ppr_meta/single_end/{local_single_reads}/{local_single_reads}_check_file_local_ppr.txt"
-	params:
-		threshold="0.7"
-	envmodules:
-		"tools",
-		"mcr/R2018a",
-		"ppr-meta/20210413"
-	shell:
-		"""
-		if grep -q . {input}; then
-			gzip -d {input}
-			cd results/ppr_meta/single_end/{wildcards.local_single_reads}
-   			ln -s ../../../../prerequisites/ppr_meta/* .
-			/usr/bin/time -v --output={wildcards.local_single_reads}.bench PPR_Meta ../../../seed_extender/single_end/{wildcards.local_single_reads}/{wildcards.local_single_reads}_local.fasta {wildcards.local_single_reads}_local.csv -t {params.threshold}
-			rm model* predict.py
-			gzip ../../../seed_extender/single_end/{wildcards.local_single_reads}/{wildcards.local_single_reads}_local.fasta 
-			touch {wildcards.local_single_reads}_check_file_local_ppr.txt
-    	else
-    		touch {output.out1}
-    		touch {output.check_file_ppr}
-		fi
-		"""

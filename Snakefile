@@ -76,8 +76,6 @@ rule all:
 		expand("results/seed_extender/paired_end/{local_paired_reads}/{local_paired_reads}_local.frag.gz", local_paired_reads=local_paired_sample),
 		expand("results/seed_extender/paired_end/{local_paired_reads}/{local_paired_reads}_local.frag_raw.gz", local_paired_reads=local_paired_sample),
 		expand("results/seed_extender/paired_end/{local_paired_reads}/{local_paired_reads}_check_file_local_seed.txt", local_paired_reads=local_paired_sample),
-		expand("results/ppr_meta/paired_end/{local_paired_reads}/{local_paired_reads}_local.csv", local_paired_reads=local_paired_sample),
-		expand("results/ppr_meta/paired_end/{local_paired_reads}/{local_paired_reads}_check_file_local_ppr.txt", local_paired_reads=local_paired_sample),
 		expand("results/trimmed_reads/single_end/{local_single_reads}/{local_single_reads}.trimmed_local.fastq", local_single_reads=local_single_sample),
 		expand("results/trimmed_reads/single_end/{local_single_reads}/{local_single_reads}_check_file_local_trim.txt", local_single_reads=local_single_sample),
 		expand("results/kma_mOTUs/single_end/{local_single_reads}/{local_single_reads}_local.res", local_single_reads=local_single_sample),
@@ -99,6 +97,4 @@ rule all:
 		expand("results/seed_extender/single_end/{local_single_reads}/{local_single_reads}_local.gfa.gz", local_single_reads=local_single_sample),
 		expand("results/seed_extender/single_end/{local_single_reads}/{local_single_reads}_local.frag.gz", local_single_reads=local_single_sample),
 		expand("results/seed_extender/single_end/{local_single_reads}/{local_single_reads}_local.frag_raw.gz", local_single_reads=local_single_sample),
-		expand("results/seed_extender/single_end/{local_single_reads}/{local_single_reads}_check_file_local_seed.txt", local_single_reads=local_single_sample),
-		expand("results/ppr_meta/single_end/{local_single_reads}/{local_single_reads}_local.csv", local_single_reads=local_single_sample),
-		expand("results/ppr_meta/single_end/{local_single_reads}/{local_single_reads}_check_file_local_ppr.txt", local_single_reads=local_single_sample)
+		expand("results/seed_extender/single_end/{local_single_reads}/{local_single_reads}_check_file_local_seed.txt", local_single_reads=local_single_sample)
