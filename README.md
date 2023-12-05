@@ -10,7 +10,7 @@ ARGprofiler is a newly developed Snakemake pipeline designed to analyze ARGs' re
 ARGprofiler uses the following tools:
 
 
-* [``` enaBrowserTools ```](https://github.com/enasequence/enaBrowserTools) for downloading raw reads from ENA
+* [``` fastq-dl ```](https://github.com/rpetit3/fastq-dl) for downloading raw reads from ENA
 * [``` fastp ```](https://github.com/OpenGene/fastp) for trimming and QC of raw reads
 * [``` KMA ```](https://bitbucket.org/genomicepidemiology/kma) for alignment of raw reads against reference databases
 * ``` ARGextender ``` for extracting the genomic flanking regions around ARGs
@@ -34,24 +34,13 @@ Since ARGprofiler is a Snakemake pipeline, the user should install Snakemake wor
 
 There are some prerequisites for using ARGprofiler:
 
-* The user must download two reference databases (mOTUs and PanRes), place them in the correct directory, and then index them with KMA. 
-	* For ``` mOTUs``` the user has to download the database from Zenodo into `prerequisites/db_motus`, unzip it, and then index it with KMA:
-		1. `cd prerequisites/db_motus`
-		2. `wget https://zenodo.org/record/5140350/files/db_mOTU_v3.0.1.tar.gz`
-		3. `tar -xzf db_mOTU_v3.0.1.tar.gz`
-		4. `kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTUs` (For KMA instructions you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
-
-	* For ``` PanRes``` the user has to download the database from Zenodo into `prerequisites/db_panres`, unzip it, and then index it with KMA:
-		1. `cd prerequisites/db_panres`
-		2. `wget https://zenodo.org/record/`
-		3. `tar -xzf` 
-		4. `kma index -i pan.fa -o panres_db` (For KMA instructions, you can check  <a href="https://bitbucket.org/genomicepidemiology/kma/src/master/">KMA</a>)
-
-* The user needs to clone the [enaBrowserTools](https://github.com/enasequence/enaBrowserTools) repository and place it in the ``` prerequisites ``` directory:  `git clone https://github.com/enasequence/enaBrowserTools.git prerequisites/enaBrowserTools`
-
 * The pipeline makes use of Snakemake profiles to specify the configuration of the pipeline. The required flags are specified in the files of the ``` profile_argprofiler ``` directory.
 	
 	* We provide a [config file](profile_argprofiler/config.yaml) for executing the pipeline in an HPC with qsub
+
+* For the analysis of unpublished sequencing reads:
+	* Place the sequencing reads in the appropriate subdirectory in the local_reads directory
+
 
 ## Input
 
@@ -129,7 +118,7 @@ When successfully executed, ARGprofiler creates a directory named ``` results ``
 
 ## Tips and Tricks
 
-* To save space ARGprofiler removes the raw and trimmed reads from each sample upon successful competition of all rules. If these files are needed for some reason, the user should comment out the last four lines in the Snakefile
+* To save space ARGprofiler, by default, removes the raw and trimmed reads from each sample upon successful competition of all rules.
 * Besides the regular output files, the kma_PanRes rule also outputs a BAM file.
 * ARGextender will, by default, run until there is nothing more to extend.
 * The user should create a ``` logs ``` directory in the main directory. Log files for each job will be placed there.
