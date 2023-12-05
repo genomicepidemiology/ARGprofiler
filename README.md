@@ -30,18 +30,6 @@ This command will create the ARGprofiler directory in the current directory.
 
 Since ARGprofiler is a Snakemake pipeline, the user should install Snakemake workflow management following the guide [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). 
 
-## Getting started
-
-There are some prerequisites for using ARGprofiler:
-
-* The pipeline makes use of Snakemake profiles to specify the configuration of the pipeline. The required flags are specified in the files of the ``` profile_argprofiler ``` directory.
-	
-	* We provide a [config file](profile_argprofiler/config.yaml) for executing the pipeline in an HPC with qsub
-
-* For the analysis of unpublished sequencing reads:
-	* Place the sequencing reads in the appropriate subdirectory in the local_reads directory
-
-
 ## Input
 
 ARGprofiler takes as input a JSON file named [`input.json`](input.json) in the following format:
@@ -118,6 +106,10 @@ When successfully executed, ARGprofiler creates a directory named ``` results ``
 
 ## Tips and Tricks
 
+* For the analysis of unpublished sequencing reads, the user should place the sequencing reads in the appropriate subdirectory in the provided local_reads directory
+* The pipeline makes use of Snakemake profiles to specify the configuration of the pipeline. The required flags are specified in the files of the ``` profile_argprofiler ``` directory.
+	
+	* We provide a [config file](profile_argprofiler/config.yaml) for executing the pipeline in an HPC with qsub
 * To save space ARGprofiler, by default, removes the raw and trimmed reads from each sample upon successful competition of all rules.
 * Besides the regular output files, the kma_PanRes rule also outputs a BAM file.
 * ARGextender will, by default, run until there is nothing more to extend.
