@@ -185,7 +185,7 @@ rule ARG_extender_paired_reads:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 
 		then 
-			/usr/bin/time -v --output=results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.ARG} {params.temp_dir} {params.db} {input.read_1} {input.read_2} {input.read_3}
+			/usr/bin/time -v --output=results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.ARG} {threads} {params.temp_dir} {params.db} {input.read_1} {input.read_2} {input.read_3}
 			gzip -f results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta
 			gzip -f results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.gfa
 			#bash check_status.sh results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench {wildcards.paired_reads} {rule}

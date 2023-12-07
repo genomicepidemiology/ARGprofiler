@@ -168,7 +168,7 @@ rule ARG_extender_single_reads:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 
 		then
-			/usr/bin/time -v --output=results/ARG_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.ARG} {params.temp_dir} {params.db} {input.read_1}
+			/usr/bin/time -v --output=results/ARG_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.ARG} {threads} {params.temp_dir} {params.db} {input.read_1}
 			gzip -f results/ARG_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fasta
 			gzip -f results/ARG_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.gfa
 			#bash check_status.sh results/ARG_extender/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench {wildcards.single_reads} {rule}
