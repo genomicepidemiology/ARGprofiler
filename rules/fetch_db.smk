@@ -45,12 +45,10 @@ rule index_db_mOTUs:
     envmodules:
         "tools",
         "kma/1.4.12a"
-    threads: 1
+    threads: 20
     shell:
         """
-        cd prerequisites/db_motus
-        tar -xf db_mOTU_v3.0.1.tar.gz
-        /usr/bin/time -v --output=index_mOTUs.bench kma index -i db_mOTU/db_mOTU_DB_CEN.fasta -o db_mOTUs
-        cd ../../
+        tar -xf {input}
+        /usr/bin/time -v --output=prerequisites/db_motus/index_mOTUs.bench kma index -i prerequisites/db_motus/db_mOTU/db_mOTU_DB_CEN.fasta -o prerequisites/db_motus/db_mOTUs
         touch {output.check_file_index}
         """
