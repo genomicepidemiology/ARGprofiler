@@ -5,28 +5,14 @@ channels:
  - default
  - genomicepidemiology
 dependencies:
-<<<<<<< Updated upstream
- - snakemake=7.32.4
-=======
+ - snakemake>=7.30.1
  - python==3.11
- - snakemake=7.30.1
->>>>>>> Stashed changes
  - fastp=0.23.4
  - kma=1.4.9
  - mash=2.3
  - r-optparse=1.7.3
  - r-essentials=4.2
  - samtools=1.17
- - spades=3.13.1
+ - spades=3.15.5
  - fqgrep=0.0.3
  - fastq-dl=2.0.4
-<<<<<<< Updated upstream
-=======
- - numpy
- - h5py
- - matlab_kernel=0.17.1
- - pip
- - pip:
-   - tensorflow
-   - keras
->>>>>>> Stashed changes
