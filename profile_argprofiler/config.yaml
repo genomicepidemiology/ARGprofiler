@@ -1,8 +1,9 @@
-cluster: qsub -W group_list={cluster.proj} -A {cluster.proj} -l nodes=1:ppn={cluster.core},mem={cluster.vmem},walltime={cluster.time} -e logs/{jobid}_snakemake.err -o logs/{jobid}_snakemake.log
-cluster-config: profile_ava/cluster_computerome.json
-cluster-status: profile_ava/qsub_status.py
-use-envmodules: True
+#cluster: qsub -W group_list={cluster.proj} -A {cluster.proj} -l nodes=1:ppn={cluster.core},mem={cluster.vmem},walltime={cluster.time} -e logs/{jobid}_snakemake.err -o logs/{jobid}_snakemake.log
+#cluster-config: profile_argprofiler/cluster_computerome.json
+#cluster-status: profile_argprofiler/qsub_status.py
+use-envmodules: False
 restart-times: 0
 latency-wait: 200
 jobs: 200
+cores: 1
 keep-going: True
