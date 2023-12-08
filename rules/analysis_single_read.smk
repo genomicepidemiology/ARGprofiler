@@ -80,7 +80,7 @@ rule kma_single_end_reads_panRes:
 	Mapping raw single reads for identifying AMR using KMA with panres db
 	"""
 	input: 
-		ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"),
+		read=ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"),
 		check_file_db="prerequisites/db_panres/check_file_index_db_panres.txt"
 	output:
 		"results/kma_panres/single_end/{single_reads}/{single_reads}.res",
@@ -108,7 +108,7 @@ rule kma_single_end_reads_panRes:
 	threads: 2
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bam
+		/usr/bin/time -v --output=results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input.read} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bam
 		rm results/kma_panres/single_end/{wildcards.single_reads}/*.aln
 		gzip -f results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fsa
 		Rscript prerequisites/mapstat_filtering/mapstatFilters.R -i {params.mapstat} -o {params.mapstat_filtered} -r {params.mapstat_table}
