@@ -50,8 +50,8 @@ rule kma_single_end_reads_mOTUs:
 	Mapping raw single reads for identifying AMR using KMA with mOTUs db
 	"""
 	input: 
-		ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"),
-		check_file_db_mOTUs="prerequisites/mOTUs/check_file_index_db_mOTUs.txt"
+		read=ancient("results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"),
+		check_file_db_mOTUs="prerequisites/db_motus/check_file_index_db_mOTUs.txt"
 	output:
 		"results/kma_mOTUs/single_end/{single_reads}/{single_reads}.res",
 		"results/kma_mOTUs/single_end/{single_reads}/{single_reads}.mapstat",
@@ -68,7 +68,7 @@ rule kma_single_end_reads_mOTUs:
 	threads: 20
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads}
+		/usr/bin/time -v --output=results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input.rea.readd} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads}
 		rm results/kma_mOTUs/single_end/{wildcards.single_reads}/*.aln
 		gzip -f results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fsa
 		#bash check_status.sh results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench {wildcards.single_reads} {rule}

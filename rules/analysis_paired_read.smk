@@ -62,7 +62,7 @@ rule kma_paired_end_reads_mOTUs:
 		read_1=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_1.trimmed.fastq"),
 		read_2=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_2.trimmed.fastq"),
 		read_3=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_singleton.trimmed.fastq"),
-		check_file_db_mOTUs="prerequisites/mOTUs/check_file_index_db_mOTUs.txt"
+		check_file_db_mOTUs="prerequisites/db_motus/check_file_index_db_mOTUs.txt"
 	output:
 		"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.res",
 		"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.mapstat",
