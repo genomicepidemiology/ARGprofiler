@@ -77,7 +77,7 @@ sub checkTarget {
 
 sub runIteration {
 	
-	my ($output, $target, $db, $kma_out, $target_reads, $SPAdes_out, @reads) = @_;
+	my ($output, $target, $db, $kma_out, $target_reads, $SPAdes_out, $processes, @reads) = @_;
 	my $se = scalar(@reads);
 	
 	######################
@@ -88,7 +88,7 @@ sub runIteration {
 	&runCmDie(sprintf("kma index -i %s -o %s.target -m 14", $target, $db));
 	
 	# align reads to target
-	&runCmDie(sprintf("kma -i %s -o %s -tmp -t_db %s.target -mem_mode -1t1 -mrc 0.25 -ID 50 -na -nc -ef -t 4", join(" ", @reads), $kma_out, $db));
+	&runCmDie(sprintf("kma -i %s -o %s -tmp -t_db %s.target -mem_mode -1t1 -mrc 0.25 -ID 50 -na -nc -ef -t %s", join(" ", @reads), $kma_out, $db, $processes));
 	
 	# extract aligning reads
 	&runCmDie(sprintf("gunzip -c %s.frag.gz | cut -f 7 | cut -f 1 -d \" \" | sort | uniq > %s", $kma_out, $target_reads));
@@ -117,7 +117,7 @@ sub runIteration {
 	# run SPAdes
 	#my $SPAdes_cmd = sprintf("spades.py -o %s ", $SPAdes_out);
 	#my $SPAdes_cmd = sprintf("spades.py --only-assembler -o %s ", $SPAdes_out);
-	my $SPAdes_cmd = sprintf("spades.py --only-assembler -k 21,33,55,87 -o %s ", $SPAdes_out);
+	my $SPAdes_cmd = sprintf("spades.py --only-assembler -k 21,33,55,87 -o %s -t %s ", $SPAdes_out, $processes);
 	#my $SPAdes_cmd = sprintf("spades.py --only-assembler -k 27,47,67,87,107,127 -t 39 -m 188 -o %s ", $SPAdes_out);
 	my $valid_files = 0;
 	$valid_files++ if(&checkTarget(sprintf("%s.fq", $filename)) == 0);
@@ -135,7 +135,7 @@ sub runIteration {
 	
 	# Get contigs with original matches
 	if(&checkTarget(sprintf("%s/scaffolds.fasta", $SPAdes_out)) == 0) {
-		&runCmDie(sprintf("kma -i %s -o %s -tmp -t_db %s -ID 50 -na -nc -a -proxi -0.7", sprintf("%s/scaffolds.fasta", $SPAdes_out), $kma_out, $db));
+		&runCmDie(sprintf("kma -i %s -o %s -tmp -t_db %s -ID 50 -na -nc -a -proxi -0.7 -t %s", sprintf("%s/scaffolds.fasta", $SPAdes_out), $kma_out, $db, $processes));
 		&matchAsm(sprintf("%s.frag.gz", $kma_out), sprintf("%s.fasta", $db));
 	} else {
 		$filename = sprintf("%s.fasta", $db);
@@ -169,12 +169,13 @@ sub main {
 	my ($argc, @argv) = @_;
 	
 	# check input
-	if($argc < 4 || 6 < $argc) {
+	if($argc < 4 || 7 < $argc) {
 		print STDERR "targetAsm.pl creates assemblies around target sequences.\n";
 		print STDERR "Requirements:\tKMA\tSPAdes\n";
 		print STDERR "Usage:\n";
-		print STDERR "targetAsm.pl iter output target read(s)\n";
+		print STDERR "targetAsm.pl iter processes output target read(s)\n";
 		print STDERR "iter:\tNumber of target assembly iterations\n";
+		print STDERR "processes:\tNumber of processes to use for multiprocessing\n";
 		print STDERR "output:\tOutput destination\n";
 		print STDERR "target:\tTarget fasta\n";
 		print STDERR "read(s):\tInput read(s), paired- or single-end, ordered as: 1,2,s (only 2nd generation)\n";
@@ -182,8 +183,12 @@ sub main {
 	}
 	
 	# get input
-	my ($iter, $output, $target, @reads) = @ARGV;
+	my ($iter, $processes, $output, $target, @reads) = @ARGV;
 	$iter = $iter + 0;
+	$processes = $processes + 0;
+
+	if ($processes eq 0) { $processes = 4; }
+	print $processes . "\n";
 	
 	# init variables
 	my ($matches, $prev_matches, $reAsm, $iternumber) = (0, 0, 0, 0);
@@ -203,7 +208,7 @@ sub main {
 	&runCmDie(sprintf("kma index -i %s -o %s -m 14", $target, $db));
 	
 	# Get reads hitting the target
-	$target = &runIteration($tmpoutput, $target, $db, $kma_out, $target_reads, $SPAdes_out, @reads);
+	$target = &runIteration($tmpoutput, $target, $db, $kma_out, $target_reads, $SPAdes_out, $processes, @reads);
 	
 	# Run iterative assembly
 	$reAsm = $iter < 0 ? 1 : $iter;
@@ -213,7 +218,7 @@ sub main {
 	}
 	while($reAsm) {
 		# Run iteration assembly
-		$target = &runIteration($tmpoutput, $target, $db, $kma_out, $target_reads, $SPAdes_out, @reads);
+		$target = &runIteration($tmpoutput, $target, $db, $kma_out, $target_reads, $SPAdes_out,$processes, @reads);
 		
 		#######################
 		## validate assembly ##
