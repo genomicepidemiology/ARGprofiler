@@ -47,6 +47,7 @@ Example:
 
 The user can also opt to specify the name of the input file in the Snakefile (with open...).
 
+For instructions on how to analyze unpublished sequencing reads check ``` Tips and Tricks ```
 ## Running ARGprofiler
 
 The user has the option to run the pipeline either on an HPC or locally. For running on HPC, we provide the option of executing the workflow using environment modules or conda packages. 
@@ -106,7 +107,7 @@ When successfully executed, ARGprofiler creates a directory named ``` results ``
 
 ## Tips and Tricks
 
-* For the analysis of unpublished sequencing reads, the user should place the sequencing reads in the appropriate subdirectory in the provided local_reads directory
+* For the analysis of unpublished sequencing reads, the user should create a new directory by the name ``` local_reads ``` and place the sequencing reads (both paired and single) in that directory. 
 * The pipeline makes use of Snakemake profiles to specify the configuration of the pipeline. The required flags are specified in the files of the ``` profile_argprofiler ``` directory.
 	
 	* We provide a [config file](profile_argprofiler/config.yaml) for executing the pipeline in an HPC with qsub
