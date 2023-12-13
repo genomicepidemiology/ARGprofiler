@@ -68,7 +68,7 @@ rule kma_single_end_reads_mOTUs:
 	threads: 20
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input.rea.readd} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads}
+		/usr/bin/time -v --output=results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input.read} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads}
 		rm results/kma_mOTUs/single_end/{wildcards.single_reads}/*.aln
 		gzip -f results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.fsa
 		#bash check_status.sh results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench {wildcards.single_reads} {rule}
