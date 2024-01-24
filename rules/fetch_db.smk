@@ -48,7 +48,7 @@ rule index_db_mOTUs:
     threads: 20
     shell:
         """
-        tar -xf {input}
+        tar -xf {input} -C prerequisites/db_motus/ db_mOTU/db_mOTU_DB_CEN.fasta
         /usr/bin/time -v --output=prerequisites/db_motus/index_mOTUs.bench kma index -i prerequisites/db_motus/db_mOTU/db_mOTU_DB_CEN.fasta -o prerequisites/db_motus/db_mOTUs
         touch {output.check_file_index}
         """
