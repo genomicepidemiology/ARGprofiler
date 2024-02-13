@@ -118,6 +118,20 @@ When successfully executed, ARGprofiler creates a directory named ``` results ``
 
 ## Citation
 
+### Accompanying code and data for ARGprofiler publication
+#### Code
+* [GeneAssimilator](https://github.com/genomicepidemiology/gene_assimilator): https://github.com/genomicepidemiology/gene_assimilator
+* Benchmark of microbial profilers: https://github.com/genomicepidemiology/argprofiler-tax-benchmark
+* Jupyter Notebooks supporting figures and tables included in manuscript: https://github.com/genomicepidemiology/argprofiler-paper-notebooks
+
+#### Data
+* MetalResistance: https://doi.org/10.5281/zenodo.8108201
+* PanRes: https://doi.org/10.5281/zenodo.8055115
+* Results of benchmarking microbial profilers: https://doi.org/10.5281/zenodo.7923774
+* De novo assemblies: [PRJEB40798](https://www.ebi.ac.uk/ena/browser/view/PRJEB40798), [PRJEB40816](https://www.ebi.ac.uk/ena/browser/view/PRJEB40816), [PRJEB40815](https://www.ebi.ac.uk/ena/browser/view/PRJEB40815), [PRJEB27621](https://www.ebi.ac.uk/ena/browser/view/PRJEB27621), [ERP015409](https://www.ebi.ac.uk/ena/browser/view/ERP015409)
+* Copenhagen sewage collection: [PRJEB34633](https://www.ebi.ac.uk/ena/browser/view/PRJEB34633)
+* Repeated sequencing of a single Copenhagen sewage sample: [PRJEB63576](https://www.ebi.ac.uk/ena/browser/view/PRJEB63576)
+
 ## Feedback and issues
 We welcome any comments, bug reports, and suggestions, as they will help us improve ARGprofiler. You can leave comments and bug reports in the [repository issue tracker](https://github.com/genomicepidemiology/ARGprofiler/issues) or reach out by e-mail to nipy@food.dtu.dk or hanmar@food.dtu.dk
- 
+
