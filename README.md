@@ -117,6 +117,8 @@ When successfully executed, ARGprofiler creates a directory named ``` results ``
 * The user should create a ``` logs ``` directory in the main directory. Log files for each job will be placed there.
 
 ## Citation
+Martiny, H. M., Pyrounakis, N., Petersen, T. N., Lukjančenko, O., Aarestrup, F. M., Clausen, P. T., & Munk, P. (2024). ARGprofiler—a pipeline for large-scale analysis of antimicrobial resistance genes and their flanking regions in metagenomic datasets. Bioinformatics, btae086. https://doi.org/10.1093/bioinformatics/btae086
+
 
 ### Accompanying code and data for ARGprofiler publication
 #### Code
