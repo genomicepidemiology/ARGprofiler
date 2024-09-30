@@ -11,6 +11,8 @@ rule download_single_end_reads:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 20
+	log:
+		"results/raw_reads/single_end/{single_reads}/{single_reads}.log"
 	shell:
 		"""
 		/usr/bin/time -v --output=results/raw_reads/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench fastq-dl -a {wildcards.single_reads} --silent --cpus {threads} --max-attempts 2 -o results/raw_reads/single_end/{wildcards.single_reads}
@@ -39,6 +41,8 @@ rule trim_single_end_reads:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 8
+	log:
+		"results/trimmed_reads/single_end/{single_reads}/{single_reads}.log"
 	shell:
 		"""
 		/usr/bin/time -v --output=results/trimmed_reads/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench fastp -i {input} -o {output} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -w {threads} -j {params.j}
@@ -66,6 +70,8 @@ rule kma_single_end_reads_mOTUs:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 20
+	log:
+		"results/kma_mOTUs/single_end/{single_reads}/{single_reads}.log"
 	shell:
 		"""
 		/usr/bin/time -v --output=results/kma_mOTUs/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input.read} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads}
@@ -95,7 +101,7 @@ rule kma_single_end_reads_panRes:
 		kma_params="-ef -1t1 -nf -vcf -sam -matrix",
 		mapstat="results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat",
 		mapstat_filtered="results/kma_panres/single_end/{single_reads}/{single_reads}.mapstat.filtered",
-		mapstat_table="prerequisites/mapstat_filtering/pan_master_gene_tbl.tsv"
+		mapstat_table="prerequisites/db_panres/panres_lengths.tsv"
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
@@ -106,6 +112,8 @@ rule kma_single_end_reads_panRes:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 2
+	log: 
+		"results/kma_panres/single_end/{single_reads}/{single_reads}.log"
 	shell:
 		"""
 		/usr/bin/time -v --output=results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench kma -i {input.read} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bam
@@ -131,6 +139,8 @@ rule mash_sketch_single_end_reads:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 20
+	log:
+		"results/mash_sketch/single_end/{single_reads}/{single_reads}.log"
 	shell:
 		"""
 		/usr/bin/time -v --output=results/mash_sketch/single_end/{wildcards.single_reads}/{wildcards.single_reads}.bench mash sketch -k 31 -s 10000 -o {output.out} -r {input} -p {threads}
@@ -164,6 +174,8 @@ rule ARG_extender_single_reads:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 20
+	log:
+		"results/ARG_extender/single_end/{single_reads}/{single_reads}.log"
 	shell:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 
@@ -200,6 +212,8 @@ rule cleanup_single_end_reads:
 		check_file_clean_raw1="results/raw_reads/single_end/{single_reads}/{single_reads}.fastq.gz",
 		check_file_clean_trim1="results/trimmed_reads/single_end/{single_reads}/{single_reads}.trimmed.fastq"
 	threads: 1
+	log:
+		"results/raw_reads/single_end/{single_reads}/clean.log"
 	shell:
 		"""
 		cd results/raw_reads/single_end/{wildcards.single_reads}

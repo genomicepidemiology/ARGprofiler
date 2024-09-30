@@ -19,7 +19,11 @@ option_list = list(
   make_option(c("-r", "--refdata"), type="character", default=NULL,
               help="A refdata file or similar where 1st and 2nd columns are reference names and lengths", metavar="character"),
   make_option(c("-d", "--depth"), type="double", default=6,
-              help="%default", metavar="Mean depth coverage of gene"));
+              help="%default", metavar="Mean depth coverage of gene"),
+  make_option(c("-v", "--verbose"), action='store_true',
+              help="verbose output", metavar="verbose", default=FALSE)
+
+);
 
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
@@ -50,15 +54,33 @@ ms_colnames = unlist(strsplit(mapstat[length(ms_header)+1], "\t"))
 ms_data = read.delim(textConnection(mapstat), comment.char = "#", h = F, 
                      col.names = ms_colnames, check.names = F)
 
+if(opt$verbose){
+  print(paste("Dimension of input:", opt$input))
+  print(paste(" - number of rows:", nrow(ms_data)))
+  print(paste(" - number of columns:", ncol(ms_data)))
+}
+
 # Read in the refdata / onject with genes and gene lengths
 refdata_width = ncol(read.delim(opt$refdata, nrows =  1, comment.char = "#", sep = "\t"))
 refdata = read.delim(opt$refdata, comment.char = "#", sep = "\t", h = F,
                      colClasses = c("character", "integer", 
                                     rep("NULL", refdata_width - 2)))
 colnames(refdata) = c("# refSequence", "length")
-      
+
+if(opt$verbose){
+  print(paste("Dimension of refdata:", opt$refdata))
+  print(paste(" - number of rows:", nrow(refdata)))
+  print(paste(" - number of columns:", ncol(refdata)))
+}
+
 # Merge data               
 ms_data2 = merge(ms_data, refdata, all.x = T)
+
+if(opt$verbose){
+  print(paste("Dimension of merged data:"))
+  print(paste(" - number of rows:", nrow(ms_data2)))
+  print(paste(" - number of columns:", ncol(ms_data2)))
+}
 
 # Detect if we have any mapstat genes unmatched by refdata length
 # Stop program with error? Warning?
@@ -81,7 +103,11 @@ ms_newcols = with(ms_data2, data.frame(meanDepthCovered = bpTotal / length,
                                        propCovered = refCoveredPositions / length))
 
 ms_data2 = cbind(ms_data2, ms_newcols)
-
+if(opt$verbose){
+  print(paste("Dimension of merged data after new columns calculated:"))
+  print(paste(" - number of rows:", nrow(ms_data2)))
+  print(paste(" - number of columns:", ncol(ms_data2)))
+}
 
 FilterMapstat = function(ms_dat, prop_cov, read_id, cons_id, spur_ratio, mean_depth) {
   ms_data_flt = ms_dat[ms_dat$propCovered > prop_cov &
@@ -92,6 +118,12 @@ FilterMapstat = function(ms_dat, prop_cov, read_id, cons_id, spur_ratio, mean_de
 }
 
 ms_data_flt = FilterMapstat(ms_data2, 0.9, 0.9, 0.9, 0.90, opt$depth)
+
+if(opt$verbose){
+  print(paste("Dimension of filtered data:"))
+  print(paste(" - number of rows:", nrow(ms_data_flt)))
+  print(paste(" - number of columns:", ncol(ms_data_flt)))
+}
 
 WriteMapstatFile = function(ms_header, ms_data, file_path) {
   # Open a file for writing

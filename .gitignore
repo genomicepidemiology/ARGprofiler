@@ -6,8 +6,10 @@ prerequisites/db_*/*.length.b
 prerequisites/db_*/*.name
 prerequisites/db_*/*.seq.b
 prerequisites/db_*/*.fa
-
+prerequisites/db_*/*.tar.gz
+prerequisites/db_*/*.bench
 # folders
 prerequisites/enaBrowserTools
 results
+backup
 .snakemake

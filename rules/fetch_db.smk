@@ -1,4 +1,4 @@
-rule fetch_db_panres:
+rule fetch_db_panres_fa:
     output:
         "prerequisites/db_panres/panres_genes.fa"
     params:
@@ -6,9 +6,23 @@ rule fetch_db_panres:
     threads: 1
     shell:
         """
-        /usr/bin/time -v --output=prerequisites/db_panres/fetch_panres.bench wget {params.zenodo_url} -P prerequisites/db_panres
+        /usr/bin/time -v --output=prerequisites/db_panres/fetch_panres_fa.bench wget {params.zenodo_url} -P prerequisites/db_panres
         """
 
+rule fetch_db_panres_meta:
+    output:
+        glengths = "prerequisites/db_panres/panres_lengths.tsv"
+    params:
+        zenodo_url="https://zenodo.org/records/10091602/files/panres_annotations.tsv",
+        meta = "prerequisites/db_panres/panres_annotations.tsv"
+    threads: 1
+    shell:
+        """
+        /usr/bin/time -v --output=prerequisites/db_panres/fetch_panres_meta.bench wget {params.zenodo_url} -P prerequisites/db_panres
+        grep 'gene_length' {params.meta} | cut -f1,3 >> {output.glengths}
+        rm {params.meta}
+        """
+        
 rule index_db_panres:
     input:
         "prerequisites/db_panres/panres_genes.fa"

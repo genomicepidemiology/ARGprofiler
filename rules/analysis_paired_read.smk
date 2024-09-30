@@ -12,6 +12,8 @@ rule download_paired_end_reads:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 20
+	log:
+		"results/raw_reads/paired_end/{paired_reads}/{paired_reads}.log"
 	shell:
 		"""
 		/usr/bin/time -v --output=results/raw_reads/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench fastq-dl -a {wildcards.paired_reads} --silent --cpus {threads} --max-attempts 2 -o results/raw_reads/paired_end/{wildcards.paired_reads}
@@ -45,10 +47,12 @@ rule trim_paired_end_reads:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2" 
 	threads: 8
+	log:
+		"results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.log"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/trimmed_reads/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench fastp -i {input.in1} -I {input.in2} -o {output.out1} -O {output.out2} --merge --merged_out {params.out_merge} --unpaired1 {output.singleton} --unpaired2 {output.singleton} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -w {threads} -j {params.j}
-		cat {params.out_merge} >> {output.singleton}
+		/usr/bin/time -v --output=results/trimmed_reads/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench fastp -i {input.in1} -I {input.in2} -o {output.out1} -O {output.out2} --merge --merged_out {params.out_merge} --unpaired1 {output.singleton} --unpaired2 {output.singleton} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -w {threads} -j {params.j} 2>> {log}
+		cat {params.out_merge} >> {output.singleton} 2>> {log}
 		rm {params.out_merge}
 		#bash check_status.sh results/trimmed_reads/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench {wildcards.paired_reads} {rule}
 		touch {output.check_file_trim}
@@ -77,11 +81,13 @@ rule kma_paired_end_reads_mOTUs:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 20
+	log:
+		"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.log"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_mOTUs/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads}
+		/usr/bin/time -v --output=results/kma_mOTUs/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads} 2>> {log}
 		rm results/kma_mOTUs/paired_end/{wildcards.paired_reads}/*.aln
-		gzip -f results/kma_mOTUs/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fsa
+		gzip -f results/kma_mOTUs/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fsa 2>> {log}
 		#bash check_status.sh results/kma_mOTUs/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench {wildcards.paired_reads} {rule}
 		touch {output.check_file_kma_mOTUs}
 		"""
@@ -108,7 +114,7 @@ rule kma_paired_end_reads_panRes:
 		kma_params="-ef -1t1 -nf -vcf -sam -matrix",
 		mapstat="results/kma_panres/paired_end/{paired_reads}/{paired_reads}.mapstat",
 		mapstat_filtered="results/kma_panres/paired_end/{paired_reads}/{paired_reads}.mapstat.filtered",
-		mapstat_table="prerequisites/mapstat_filtering/pan_master_gene_tbl.tsv"
+		mapstat_table="prerequisites/db_panres/panres_lengths.tsv"
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
@@ -119,12 +125,14 @@ rule kma_paired_end_reads_panRes:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 2
+	log:
+		"results/kma_panres/paired_end/{paired_reads}/{paired_reads}.log"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bam
-		rm results/kma_panres/paired_end/{wildcards.paired_reads}/*.aln
-		gzip -f results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fsa
-		Rscript prerequisites/mapstat_filtering/mapstatFilters.R -i {params.mapstat} -o {params.mapstat_filtered} -r {params.mapstat_table}
+		/usr/bin/time -v --output=results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads} |samtools fixmate -m - -|samtools view -u -bh -F 4|samtools sort -o results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bam 2>> {log}
+		rm results/kma_panres/paired_end/{wildcards.paired_reads}/*.aln 
+		gzip -f results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fsa 2>> {log}
+		Rscript prerequisites/mapstat_filtering/mapstatFilters.R -i {params.mapstat} -o {params.mapstat_filtered} -r {params.mapstat_table} 2>> {log}
 		#bash check_status.sh results/kma_panres/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench {wildcards.paired_reads} {rule}
 		touch {output.check_file_kma_panres}
 		"""
@@ -146,9 +154,11 @@ rule mash_sketch_paired_end_reads:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 20
+	log:
+		"results/mash_sketch/paired_end/{paired_reads}/{paired_reads}.log"
 	shell:
 		"""
-		/usr/bin/time -v --output=results/mash_sketch/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench cat {input.read_1} {input.read_2} {input.read_3} | mash sketch -k 31 -s 10000 -I {wildcards.paired_reads} -C Paired -r -o {output.out} -p {threads} -
+		/usr/bin/time -v --output=results/mash_sketch/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench cat {input.read_1} {input.read_2} {input.read_3} | mash sketch -k 31 -s 10000 -I {wildcards.paired_reads} -C Paired -r -o {output.out} -p {threads} - 2>> {log}
 		#bash check_status.sh results/mash_sketch/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench {wildcards.paired_reads} {rule}
 		touch {output.check_file_mash}
 		"""
@@ -181,16 +191,20 @@ rule ARG_extender_paired_reads:
 		"mariadb/10.4.17",
 		"mariadb-connector-c/3.3.2"
 	threads: 20
+	log:
+		"results/ARG_extender/paired_end/{paired_reads}/{paired_reads}.log"
 	shell:
 		"""
 		if grep -q -v -m 1 "#" {input.panres_mapstat_filtered}; 
-		then 
-			/usr/bin/time -v --output=results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.ARG} {threads} {params.temp_dir} {params.db} {input.read_1} {input.read_2} {input.read_3}
-			gzip -f results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta
-			gzip -f results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.gfa
-			#bash check_status.sh results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench {wildcards.paired_reads} {rule}
+		then
+			echo "running argextender" >> {log} 
+			/usr/bin/time -v --output=results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench perl prerequisites/ARGextender/targetAsm.pl {params.ARG} {threads} {params.temp_dir} {params.db} {input.read_1} {input.read_2} {input.read_3} 2>> {log}
+			gzip -f results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.fasta 2>> {log}
+			gzip -f results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.gfa 2>> {log}
+			#bash check_status.sh results/ARG_extender/paired_end/{wildcards.paired_reads}/{wildcards.paired_reads}.bench {wildcards.paired_reads} {rule} 2>> {log}
 			touch {output.check_file_ARG}
 		else
+			echo "not running argextender" >> {log}
 			touch {output.out_fasta}
 			touch {output.out_gfa}
 			touch {output.out_frag}
@@ -219,6 +233,7 @@ rule cleanup_paired_end_reads:
 		check_file_clean_trim1="results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_1.trimmed.fastq",
 		check_file_clean_trim2="results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_2.trimmed.fastq",
 		check_file_clean_trim3="results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_singleton.trimmed.fastq"
+	log: 
 	shell:
 		"""
 		cd results/raw_reads/paired_end/{wildcards.paired_reads}

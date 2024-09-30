@@ -68,7 +68,8 @@ rule all:
 	input:
 		#expand("prerequisites/db_panres/panres_genes.fa"),
 		expand("prerequisites/db_panres/check_file_index_db_panres.txt"),
-		expand("prerequisites/db_motus/check_file_index_db_mOTUs.txt"),
+		expand("prerequisites/db_panres/panres_lengths.tsv"),
+		# expand("prerequisites/db_motus/check_file_index_db_mOTUs.txt"),
 		#expand("results/raw_reads/paired_end/{paired_reads}/{paired_reads}_1.fastq.gz", paired_reads=paired),
 		#expand("results/raw_reads/paired_end/{paired_reads}/{paired_reads}_2.fastq.gz", paired_reads=paired),
 		#expand("results/raw_reads/paired_end/{paired_reads}/{paired_reads}_check_file_raw.txt", paired_reads=paired),
