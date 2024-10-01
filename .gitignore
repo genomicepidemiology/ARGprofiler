@@ -1,6 +1,7 @@
 #ignore specific files
 */.DS_store
 .DS_store
+*/*.log
 prerequisites/db_*/*.comp.b
 prerequisites/db_*/*.length.b
 prerequisites/db_*/*.name
