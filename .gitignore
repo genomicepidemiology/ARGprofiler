@@ -1,7 +1,8 @@
 #ignore specific files
 */.DS_store
 .DS_store
-*/*.log
+*.log
+*.txt
 prerequisites/db_*/*.comp.b
 prerequisites/db_*/*.length.b
 prerequisites/db_*/*.name
@@ -9,6 +10,7 @@ prerequisites/db_*/*.seq.b
 prerequisites/db_*/*.fa
 prerequisites/db_*/*.tar.gz
 prerequisites/db_*/*.bench
+prerequisites/db_*/*.tsv
 # folders
 prerequisites/enaBrowserTools
 results
