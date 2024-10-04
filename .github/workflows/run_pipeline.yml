@@ -30,7 +30,7 @@ jobs:
           directory: '.'
           snakefile: 'Snakefile'
           args: '-np'
-          stagein: 'time echo "hello"'
+          stagein: 'time echo -v "hello"'
       # - name: Snakemake workflow full run
       #   uses: snakemake/snakemake-github-action@v1
       #   with:
