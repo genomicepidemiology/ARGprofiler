@@ -9,6 +9,7 @@ rule download_paired_end_reads:
 	envmodules:
 		"tools",
 		"fastq-dl/2.0.4",
+	conda: "envs/environment_argprofiler.yaml"
 	params:
 		time=config["time_path"],
 		attempts=config["max_attempts"]
@@ -45,6 +46,7 @@ rule trim_paired_end_reads:
 	envmodules:
 		"tools",
 		"fastp/0.23.2",
+	conda: "envs/environment_argprofiler.yaml"
 	threads: 8
 	log:
 		"results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.log"
@@ -77,6 +79,7 @@ rule kma_paired_end_reads_mOTUs:
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
+	conda: "envs/environment_argprofiler.yaml"
 	threads: 20
 	log:
 		"results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.log"
@@ -120,6 +123,7 @@ rule kma_paired_end_reads_panRes:
 		"intel/perflibs/64/2020_update2",
 		"R/4.3.0",
 	threads: 2
+	conda: "envs/environment_argprofiler.yaml"
 	log:
 		"results/kma_panres/paired_end/{paired_reads}/{paired_reads}.log"
 	shell:
@@ -145,6 +149,7 @@ rule mash_sketch_paired_end_reads:
 	envmodules:
 		"tools",
 		"mash/2.3",
+	conda: "envs/environment_argprofiler.yaml"
 	params:
 		time=config["time_path"],
 		k=config["mash_k"],
@@ -184,6 +189,7 @@ rule ARG_extender_paired_reads:
 		"anaconda3/2022.10",
 		"spades/3.15.5",
 		"fqgrep/0.0.3",
+	conda: "envs/environment_argprofiler.yaml"
 	threads: 20
 	log:
 		"results/ARG_extender/paired_end/{paired_reads}/{paired_reads}.log"
