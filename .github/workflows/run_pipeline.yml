@@ -16,22 +16,19 @@ jobs:
         run: | 
           which time
           /usr/bin/time -v echo "hello"
-      - name: Check whats installed with apt-list
-        run:  | 
-          apt list --installed
-      # - name: Snakemake workflow dryrun
-      #   uses: snakemake/snakemake-github-action@v1
-      #   with:
-      #     directory: '.'
-      #     snakefile: 'Snakefile'
-      #     args: '-v'
-      #     stagein: 'which time'
-      # - name: Snakemake workflow full run
-      #   uses: snakemake/snakemake-github-action@v1
-      #   with:
-      #     directory: '.'
-      #     snakefile: 'Snakefile'
-      #     args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
-      #     stagein: '' # additional preliminary commands to run (can be multiline)
-      #     show-disk-usage-on-error: true
+      - name: Snakemake workflow dryrun
+        uses: snakemake/snakemake-github-action@v1.25.1
+        with:
+          directory: '.'
+          snakefile: 'Snakefile'
+          args: '-v'
+          stagein: ''
+      - name: Snakemake workflow full run
+        uses: snakemake/snakemake-github-action@v1.25.1
+        with:
+          directory: '.'
+          snakefile: 'Snakefile'
+          args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
+          stagein: '' # additional preliminary commands to run (can be multiline)
+          show-disk-usage-on-error: true
       - run: echo "🍏 This job's status is ${{ job.status }}."
