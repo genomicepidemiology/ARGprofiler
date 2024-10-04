@@ -21,7 +21,7 @@ jobs:
         with:
           directory: '.'
           snakefile: 'Snakefile'
-          args: '-n'
+          args: '-v'
           stagein: 'which time'
       # - name: Snakemake workflow full run
       #   uses: snakemake/snakemake-github-action@v1
