@@ -21,3 +21,10 @@ jobs:
       - name: Do we have time?
         run: | 
           which time
+      - name: Snakemake workflow - np
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: '.'
+          snakefile: 'Snakefile'
+          args: '-np'
+      - run: echo "🍏 This job's status is ${{ job.status }}."
