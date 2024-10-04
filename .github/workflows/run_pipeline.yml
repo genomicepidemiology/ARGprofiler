@@ -23,8 +23,7 @@ jobs:
           which time
       - name: Does time work?
         run: | 
-          time echo "how time flies?"
-          time --help
+          /usr/bin/time echo "hello"
       # - name: Snakemake workflow dryrun
       #   uses: snakemake/snakemake-github-action@v1
       #   with:
