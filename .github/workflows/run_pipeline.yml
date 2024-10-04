@@ -24,13 +24,14 @@ jobs:
       - name: Does time work?
         run: | 
           time echo "how time flies?"
+          time -h
       - name: Snakemake workflow dryrun
         uses: snakemake/snakemake-github-action@v1
         with:
           directory: '.'
           snakefile: 'Snakefile'
-          args: '-np'
-          stagein: 'time echo -v "hello"'
+          args: '-n'
+          stagein: ''
       # - name: Snakemake workflow full run
       #   uses: snakemake/snakemake-github-action@v1
       #   with:
