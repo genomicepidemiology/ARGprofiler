@@ -21,10 +21,18 @@ jobs:
       - name: Do we have time?
         run: | 
           which time
-      - name: Snakemake workflow - np
+      - name: Snakemake workflow dryrun
         uses: snakemake/snakemake-github-action@v1
         with:
           directory: '.'
           snakefile: 'Snakefile'
           args: '-np'
+      - name: Snakemake workflow full run
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: '.'
+          snakefile: 'Snakefile'
+          args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
+          stagein: '' # additional preliminary commands to run (can be multiline)
+          show-disk-usage-on-error: true
       - run: echo "🍏 This job's status is ${{ job.status }}."
