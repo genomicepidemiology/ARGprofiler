@@ -20,7 +20,6 @@ rule fetch_db_panres_meta:
         time=config["time_path"],
         zenodo_url=config["zenodo_panres_meta"],
         meta = "prerequisites/db_panres/panres_annotations.tsv",
-        time=config["time_path"],
     threads: 1
     log:
         "prerequisites/db_panres/panres_meta.log"
