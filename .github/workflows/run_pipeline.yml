@@ -21,9 +21,7 @@ jobs:
       - name: Do we have time?
         run: | 
           which time
-      - name: Does time work?
-        run: | 
-          /usr/bin/time echo "hello"
+          /usr/bin/time -v echo "hello"
       # - name: Snakemake workflow dryrun
       #   uses: snakemake/snakemake-github-action@v1
       #   with:
