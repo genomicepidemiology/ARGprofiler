@@ -1,8 +1,8 @@
-name: ARGprofiler 
+name: Run the ARGprofiler workflow
 run-name: ${{ github.actor }} is testing out ARGprofiler 🚀
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Run-the-ARGprofiler-workflow:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -18,4 +18,12 @@ jobs:
       - name: Get working directory
         run: | 
           pwd
+      - name: Snakemake workflow
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: '.'
+          snakefile: 'Snakefile'
+          args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
+          stagein: '' # additional preliminary commands to run (can be multiline)
+          show-disk-usage-on-error: true
       - run: echo "🍏 This job's status is ${{ job.status }}."
