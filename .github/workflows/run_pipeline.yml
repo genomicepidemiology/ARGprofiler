@@ -16,13 +16,16 @@ jobs:
         run: | 
           which time
           /usr/bin/time -v echo "hello"
-      - name: Snakemake workflow dryrun
-        uses: snakemake/snakemake-github-action@v1
-        with:
-          directory: '.'
-          snakefile: 'Snakefile'
-          args: '-v'
-          stagein: 'which time'
+      - name: Check whats installed with apt-list
+        run:  | 
+          apt list --installed
+      # - name: Snakemake workflow dryrun
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: '.'
+      #     snakefile: 'Snakefile'
+      #     args: '-v'
+      #     stagein: 'which time'
       # - name: Snakemake workflow full run
       #   uses: snakemake/snakemake-github-action@v1
       #   with:
