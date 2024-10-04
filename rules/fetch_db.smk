@@ -38,7 +38,7 @@ rule index_db_panres:
     envmodules:
         "tools",
         "kma/1.4.12a"
-	conda: "envs/environment_argprofiler.yaml"
+    conda: "../env/environment_argprofiler.yaml"
     params:
         time=config["time_path"]
     threads: 1
@@ -72,7 +72,8 @@ rule index_db_mOTUs:
     envmodules:
         "tools",
         "kma/1.4.12a"
-	conda: "envs/environment_argprofiler.yaml"
+    conda: 
+        "../env/environment_argprofiler.yaml"
     params:
         time=config["time_path"],
     threads: 20
