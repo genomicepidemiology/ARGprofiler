@@ -1,0 +1,26 @@
+# path for 'time' command 
+time_path: /usr/bin/time
+
+# zenodo urls
+zenodo_panres_fa: "https://zenodo.org/records/10091602/files/panres_genes.fa"
+zenodo_panres_meta: "https://zenodo.org/records/10091602/files/panres_annotations.tsv"
+zenodo_motus_tar: "https://zenodo.org/records/5140350/files/db_mOTU_v3.0.1.tar.gz"
+
+# fastq-dl parameters
+max_attempts: 2
+
+# parameters for fastp
+overlap_diff_limit: "1"
+average_qual: "20"
+length_required: "50"
+cut_tail: "--cut_tail"
+
+# kma parameters for PanRes mapping
+kma_params_panres: "-ef -1t1 -nf -vcf -sam -matrix"
+
+# kma parameters for mOTUs mapping
+kma_params_motus: "-mem_mode -ef -1t1 -apm p -oa -matrix"
+
+# mash parameters
+mash_k: "31"
+mash_s: "10000"

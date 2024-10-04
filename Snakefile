@@ -5,6 +5,8 @@ import os
 import re
 import subprocess
 
+configfile: "config/config.yaml"
+
 include: "rules/analysis_paired_read.smk"
 include: "rules/analysis_single_read.smk"
 include: "rules/fetch_db.smk"
