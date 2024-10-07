@@ -6,8 +6,8 @@ rule fetch_db_panres_fa:
         time=config["time_path"]
     threads: 1
     log:
-        "prerequisites/db_panres/panres_genes.log
-    resources:
+        "prerequisites/db_panres/panres_genes.log"
+    resources: 
         shell_exec="sh"
     shell:
         """
