@@ -16,15 +16,12 @@ jobs:
         run: | 
           which time
           /usr/bin/time -v echo "hello"
-      - name: Setup conda
-        uses: conda-incubator/setup-miniconda@v3
+      - uses: conda-incubator/setup-miniconda@v3
         with:
-          python-version: 3.11
-          mambda-version: "*"
-          channels: conda-forge, defaults, bioconda, genomicepidemiology
           activate-environment: argprofiler
-          environment-file: env/environment_argprofiler
-      - shell: bash
+          python-version: 3.11
+      - name: Test conda
+        shell: bash
         run: |
           conda info
           conda list
