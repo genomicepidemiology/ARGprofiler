@@ -24,7 +24,7 @@ jobs:
           channels: conda-forge, defaults, bioconda, genomicepidemiology
           activate-environment: argprofiler
           environment-file: env/environment_argprofiler
-      - shell: bash -el {0}
+      - shell: bash
         run: |
           conda info
           conda list
