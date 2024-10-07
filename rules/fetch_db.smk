@@ -6,7 +6,9 @@ rule fetch_db_panres_fa:
         time=config["time_path"]
     threads: 1
     log:
-        "prerequisites/db_panres/panres_genes.log"
+        "prerequisites/db_panres/panres_genes.log
+    resources:
+        shell_exec="sh"
     shell:
         """
         {params.time} -v --output=prerequisites/db_panres/fetch_panres_fa.bench wget {params.zenodo_url} -P prerequisites/db_panres >> {log}
