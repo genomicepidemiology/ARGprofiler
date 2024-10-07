@@ -24,15 +24,13 @@ jobs:
       - name: Test conda
         shell: bash
         run: |
+          conda activate argprofiler
           conda info
           conda list
-#      - name: Snakemake workflow dryrun
-#        uses: snakemake/snakemake-github-action@v1.25.1
-#        with:
-#          directory: '.'
-#          snakefile: 'Snakefile'
-#          args: '-np'
-#          stagein: ''
+      - name: Snakemake workflow dryrun
+        run: |
+          conda activate argprofiler
+          snakemake -np
 #      - name: Snakemake test panres
 #        uses: snakemake/snakemake-github-action@v1.25.1
 #        with:
