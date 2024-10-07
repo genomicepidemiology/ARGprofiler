@@ -20,6 +20,7 @@ jobs:
         with:
           activate-environment: argprofiler
           python-version: 3.11
+          environment-file: env/environment_argprofiler.yaml
       - name: Test conda
         shell: bash
         run: |
