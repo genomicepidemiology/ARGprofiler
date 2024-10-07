@@ -17,7 +17,7 @@ jobs:
           which time
           /usr/bin/time -v echo "hello"
       - name: Snakemake workflow dryrun
-        shell: bash
+        uses: snakemake/snakemake-github-action@v1.25.1
         with:
           directory: '.'
           snakefile: 'Snakefile'
