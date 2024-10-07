@@ -21,14 +21,10 @@ jobs:
           activate-environment: argprofiler
           python-version: 3.11
           environment-file: env/environment_argprofiler.yaml
-      - name: Test conda
+      - name: Snakemake workflow dryrun
         shell: bash
         run: |
-          conda activate argprofiler
-          conda info
-          conda list
-      - name: Snakemake workflow dryrun
-        run: |
+          conda init
           conda activate argprofiler
           snakemake -np
 #      - name: Snakemake test panres
