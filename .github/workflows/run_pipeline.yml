@@ -28,7 +28,7 @@ jobs:
         with:
           directory: '.'
           snakefile: 'Snakefile'
-          args: '--use-conda --cores 1 --clonda-cleanup-pkgs cache --until fetch_db_panres_fa'
+          args: '--use-conda --cores 1 --until fetch_db_panres_fa'
           stagein: ''
 #      - name: Snakemake workflow full run
 #        uses: snakemake/snakemake-github-action@v1.25.1
