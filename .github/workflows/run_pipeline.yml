@@ -16,20 +16,32 @@ jobs:
         run: | 
           which time
           /usr/bin/time -v echo "hello"
-      - name: Snakemake workflow dryrun
-        uses: snakemake/snakemake-github-action@v1.25.1
+      - name: Setup conda
+      - uses: conda-incubator/setup-miniconda@v3
         with:
-          directory: '.'
-          snakefile: 'Snakefile'
-          args: '-np'
-          stagein: ''
-      - name: Snakemake test panres
-        uses: snakemake/snakemake-github-action@v1.25.1
-        with:
-          directory: '.'
-          snakefile: 'Snakefile'
-          args: '--use-conda --cores 1 --until fetch_db_panres_fa'
-          stagein: ''
+          python-version: 3.11
+          mambda-version: "*"
+          channels: conda-forge, defaults, bioconda, genomicepidemiology
+          activate-environment: argprofiler
+          environment-file: env/environment_argprofiler
+      - shell: bash -el {0}
+        run: |
+          conda info
+          conda list
+#      - name: Snakemake workflow dryrun
+#        uses: snakemake/snakemake-github-action@v1.25.1
+#        with:
+#          directory: '.'
+#          snakefile: 'Snakefile'
+#          args: '-np'
+#          stagein: ''
+#      - name: Snakemake test panres
+#        uses: snakemake/snakemake-github-action@v1.25.1
+#        with:
+#          directory: '.'
+#          snakefile: 'Snakefile'
+#          args: '--use-conda --cores 1 --until fetch_db_panres_fa'
+#          stagein: ''
 #      - name: Snakemake workflow full run
 #        uses: snakemake/snakemake-github-action@v1.25.1
 #        with:
