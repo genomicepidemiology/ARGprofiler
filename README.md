@@ -66,7 +66,7 @@ snakemake --profile profile_argprofiler
 While we have designed ARGprofiler to run in an HPC environment (specifically [Computerome](https://www.computerome.dk/)), it is possible to run the pipeline locally. Therefore, we recommend creating a mamba environment as follows:
 
 ```{bash}
-mamba env create --name argprofiler --file rules/environment_argprofiler.yaml
+mamba env create --name argprofiler --file env/environment_argprofiler.yaml
 ```
 
 Since we are not executing ARGprofiler in HPC, the user should remove the following flag from the config file: ```cluster, cluster-config``` and add the following flag: ```cores``` (The ```cores``` flag should be changed to reflect the number of cores for Snakemake to use). 
