@@ -21,25 +21,12 @@ jobs:
           activate-environment: argprofiler
           python-version: 3.11
           environment-file: env/environment_argprofiler.yaml
-      - name: Snakemake workflow dryrun
-        shell: bash
-        run: |
-          conda init
-          conda activate argprofiler
-          snakemake -np
-#      - name: Snakemake test panres
-#        uses: snakemake/snakemake-github-action@v1.25.1
-#        with:
-#          directory: '.'
-#          snakefile: 'Snakefile'
-#          args: '--use-conda --cores 1 --until fetch_db_panres_fa'
-#          stagein: ''
-#      - name: Snakemake workflow full run
-#        uses: snakemake/snakemake-github-action@v1.25.1
-#        with:
-#          directory: '.'
-#          snakefile: 'Snakefile'
-#          args: '--cores 1 --use-conda --conda-cleanup-pkgs cache'
-#          stagein: '' # additional preliminary commands to run (can be multiline)
-#          show-disk-usage-on-error: true
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Snakemake workflow dry-run
+        uses: snakemake/snakemake-github-action@v1.25.1
+        with:
+          directory: '.'
+          snakefile: 'Snakefile'
+          args: '-np'
+          stagein: ''
       - run: echo "🍏 This job's status is ${{ job.status }}."
