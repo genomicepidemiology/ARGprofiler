@@ -1,6 +1,10 @@
 # ARGprofiler
 A tool for large-scale analysis of antimicrobial resistance genes (ARGs) and their flanking regions in metagenomic datasets.
 
+
+[![DOI](https://zenodo.org/badge/648570143.svg)](https://doi.org/10.5281/zenodo.14637668)
+
+
 <img src="ARGprofiler_pipeline.png" alt="ARGprofiler pipeline">
 
 ## Introduction
