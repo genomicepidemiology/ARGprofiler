@@ -4,6 +4,7 @@ import glob
 import os
 import re
 import subprocess
+from collections import defaultdict
 
 configfile: "config/config.yaml"
 
@@ -11,58 +12,83 @@ include: "rules/analysis_paired_read.smk"
 include: "rules/analysis_single_read.smk"
 include: "rules/fetch_db.smk"
 
-def build_inputs(jsonFile):
-	#p_id = re.compile(r'.+\/(\w+[^_1])\_?\d?\..+\.gz')
-	p_id = re.compile(r'.+\/(((\w+)_\d)|(\w+))\..+\.gz')
+def build_inputs(jsonFile, local_folder='local_reads'):
 
-	single, paired = set(), set()
-	# First extract run_ids and run_read_types from jsonFile
-	with open(jsonFile, 'r') as f:
-		data = json.load(f)
+    # Sets to store sample IDs in
+    single, paired = set(), set()
 
-	for sample_id, sample_id_read_type in data.items():
-		if sample_id_read_type['type'] == 'PAIRED':
-			paired.add(sample_id)
-		elif sample_id_read_type['type'] == 'SINGLE':
-			single.add(sample_id)
+    # Open the json file
+    with open(jsonFile, 'r') as jf:
+        data = json.load(jf)
 
-	# Directories of local raw reads
-	local_raw_reads=sorted(glob.glob(os.path.join("local_reads", "*.gz")))
-	i = 0
-	while i < len(local_raw_reads):
-		local_file = local_raw_reads[i]
-		match = p_id.findall(local_file)[0]
-		if len(match[-2]) > 0:
-			m = match[-2]
-		else:
-			m = match[-1]
-		read_type = None
-		local_file2=""
-	
-		if '_1' in local_file: # paired
-			# check reverse is there
-			local_file2 = local_file.replace('_1', '_2')
-			if local_file2 == local_raw_reads[i+1]: 	
-				paired.add(m)
-				read_type="paired_end"
-		else:
-			single.add(m)
-			read_type="single_end"
-		
-		# move files
-		if read_type in ['single_end', 'paired_end']:
-			destDir = os.path.join("results", "raw_reads", read_type, m)
-			checkFile = os.path.join(destDir, m + '_check_file_raw.txt')
-			os.makedirs(destDir, exist_ok=True)
-			p = subprocess.run(f"cp -u -t {destDir} {local_file} {local_file2}", shell=True)
-			if p.returncode == 0:
-				subprocess.run(f"> {checkFile}", shell=True)
+    # Loop through the json input and sort the file ids
+    for sample_id, sample_id_read_type in data.items():
+        if sample_id_read_type['type'] == 'PAIRED':
+            paired.add(sample_id)
+        elif sample_id_read_type['type'] == 'SINGLE':
+            single.add(sample_id)
+    
+    # Now extract files in local_folder
+    local_reads = sorted(glob.glob(os.path.join(local_folder, '*.fastq.gz')))
+    single_files, paired_files = defaultdict(set), defaultdict(set)
 
-		if read_type == 'paired_end':
-			i += 2
-		else:
-			i += 1		
-	return list(single), list(paired)
+    # Regex pattern to match the sample names and the specific suffixes
+    p1 = re.compile(r'.+(R[12]).+\.fastq\.gz')
+    p2 = re.compile(r'.+(_[12])\.fastq\.gz')
+
+    # Now sort the files whether they are paired reads or not
+    for fastqFile in local_reads:
+        m1 = p1.match(fastqFile)
+        m2 = p2.match(fastqFile)
+        m = m1 if m1 else m2
+        if m is not None:
+            sample_id = os.path.basename(fastqFile).split(m.group(1))[0]
+            sample_id = re.sub(r"([-_])$", "", sample_id)
+            paired_files[sample_id].add(fastqFile)
+            paired.add(sample_id)
+            
+        else:
+            sample_id = os.path.basename(fastqFile).split(".fastq")[0]
+            single_files[sample_id].add(fastqFile)
+            single.add(sample_id)
+
+    cmd_paired_template = "ln -sf {} {} && ln -sf {} {} && touch {}_check_file_raw.txt"
+    #.format(os.path.realpath(fastqFile), os.path.join(dest_dir, os.path.basename(fastqFile)))
+    for paired_id, paired_files in paired_files.items():
+        # double check there are exactly two files stored for the id
+        paired_files = list(paired_files)
+        if len(paired_files) == 2:
+            dest_dir = os.path.join("results", "raw_reads", "paired_end", paired_id)
+            os.makedirs(dest_dir, exist_ok=True)
+            cmd = cmd_paired_template.format(
+                os.path.realpath(paired_files[0]),
+                os.path.join(dest_dir, os.path.basename(paired_files[0])),
+                os.path.realpath(paired_files[1]),
+                os.path.join(dest_dir, os.path.basename(paired_files[1])),
+                os.path.join(dest_dir, paired_id)
+                
+            )
+            subprocess.run(cmd, shell=True)
+        elif len(paired_files) == 1:
+            paired.remove(paired_id)
+            single.add(paired_id)
+            single_files[paired_id].add(paired_files[0])
+
+    # move single end files
+    cmd_single_template = "ln -sf {} {} && touch {}_check_file_raw.txt"
+    for single_id, single_files in single_files.items():
+        single_files = list(single_files)
+        if len(single_files) == 1:
+            dest_dir = os.path.join("results", "raw_reads", "single_end", single_id)
+            os.makedirs(dest_dir, exist_ok=True)
+            cmd = cmd_single_template.format(
+                os.path.realpath(single_files[0]),
+                os.path.join(dest_dir, os.path.basename(single_files[0])),
+                os.path.join(dest_dir, single_id)
+            )
+            subprocess.run(cmd, shell=True)
+    
+    return list(single), list(paired)
 
 single, paired = build_inputs("input.json")
 
