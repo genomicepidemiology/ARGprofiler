@@ -1,6 +1,9 @@
 # path for 'time' command 
 time_path: /usr/bin/time
 
+# path for scripts
+scripts: workflow/scripts
+
 # zenodo urls
 zenodo_panres_fa: "https://zenodo.org/records/10091602/files/panres_genes.fa"
 zenodo_panres_meta: "https://zenodo.org/records/10091602/files/panres_annotations.tsv"
