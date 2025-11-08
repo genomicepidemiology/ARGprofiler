@@ -20,7 +20,7 @@ jobs:
         with:
           activate-environment: argprofiler
           python-version: 3.11
-          environment-file: env/environment_argprofiler.yaml
+          environment-file: workflow/env/environment_argprofiler.yaml
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Snakemake workflow dry-run
         uses: snakemake/snakemake-github-action@v1.25.1
