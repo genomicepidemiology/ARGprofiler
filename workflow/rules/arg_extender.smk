@@ -21,7 +21,8 @@ rule ARG_extender_single_reads:
 		out_gfa="results/ARG_extender/single_end/{single_reads}/{single_reads}.gfa",
 		out_time="results/ARG_extender/single_end/{single_reads}/{single_reads}.bench",
 		time=config["time_path"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
@@ -40,8 +41,10 @@ rule ARG_extender_single_reads:
 			{params.time} -v --output={params.out_time} perl prerequisites/ARGextender/targetAsm.pl {params.ARG} {threads} {params.temp_dir} {params.db} {input.read_1} 2>> {log}
 			gzip -f {params.out_fasta} 2>> {log}
 			gzip -f {params.out_gfa} 2>> {log}
-            python {params.scripts_dir}/get_time.py -f {params.out_time} --run
-            python {params.scripts_dir}/get_argextender.py -f {output.out_frag} -n {params.db_name} --run >> {log}
+            if [ "{params.update_mysql}" = "true" ]; then
+				python {params.scripts_dir}/get_time.py -f {params.out_time} --run
+            	python {params.scripts_dir}/get_argextender.py -f {output.out_frag} -n {params.db_name} --run >> {log}
+			fi
 			touch {output.check_file_ARG}
 		else
 			echo "not running argextender" > {log}
@@ -49,9 +52,10 @@ rule ARG_extender_single_reads:
 			touch {output.out_gfa}
 			touch {output.out_frag}
 			touch {output.out_frag_gz}
-            python {params.scripts_dir}/job_status.py --run_accession {wildcards.single_reads} --rule ARG_extender_single_reads
+            if [ "{params.update_mysql}" = "true" ]; then
+				python {params.scripts_dir}/job_status.py --run_accession {wildcards.single_reads} --rule ARG_extender_single_reads
+			fi
 			touch {output.check_file_ARG}
-		fi
 		"""
 
 rule ARG_extender_paired_reads:
@@ -78,7 +82,8 @@ rule ARG_extender_paired_reads:
 		db_name="prerequisites/db_panres/panres.name",
 		out_time="results/ARG_extender/paired_end/{paired_reads}/{paired_reads}.bench",
 		time=config["time_path"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
@@ -97,8 +102,10 @@ rule ARG_extender_paired_reads:
 			{params.time} -v --output={params.out_time} perl prerequisites/ARGextender/targetAsm.pl {params.ARG} {threads} {params.temp_dir} {params.db} {input.read_1} {input.read_2} {input.read_3} 2>> {log}
 			gzip -f {params.out_fasta} 2>> {log}
 			gzip -f {params.out_gfa} 2>> {log}
-            python {params.scripts_dir}/get_time.py -f {params.out_time} --run
-            python {params.scripts_dir}/get_argextender.py -f {output.out_frag} -n {params.db_name} --run >> {log}
+            if [ "{params.update_mysql}" = "true" ]; then
+				python {params.scripts_dir}/get_time.py -f {params.out_time} --run
+            	python {params.scripts_dir}/get_argextender.py -f {output.out_frag} -n {params.db_name} --run >> {log}
+			fi
 			touch {output.check_file_ARG}
 		else
 			echo "not running argextender" > {log}
@@ -106,7 +113,9 @@ rule ARG_extender_paired_reads:
 			touch {output.out_gfa}
 			touch {output.out_frag}
 			touch {output.out_frag_gz}
-            python {params.scripts_dir}/job_status.py --run_accession {wildcards.paired_reads} --rule ARG_extender_paired_reads
+            if [ "{params.update_mysql}" = "true" ]; then
+				python {params.scripts_dir}/job_status.py --run_accession {wildcards.paired_reads} --rule ARG_extender_paired_reads
+			fi
 			touch {output.check_file_ARG}
 		fi
 		"""

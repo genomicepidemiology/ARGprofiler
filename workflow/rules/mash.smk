@@ -17,14 +17,17 @@ rule mash_sketch_single_end_reads:
 		time=config["time_path"],
 		k=config["mash_k"],
 		s=config["mash_s"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	threads: 20
 	log:
 		"results/mash_sketch/single_end/{single_reads}/{single_reads}.log"
 	shell:
 		"""
 		{params.time} -v --output={output.out_time} mash sketch -k {params.k} -s {params.s} -o {output.out} -r {input} -p {threads} 2> {log}
-        python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+		if [ "{params.update_mysql}" = "true" ]; then
+			python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+		fi
 		touch {output.check_file_mash}
 		"""
 
@@ -48,13 +51,16 @@ rule mash_sketch_paired_end_reads:
 		time=config["time_path"],
 		k=config["mash_k"],
 		s=config["mash_s"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	threads: 20
 	log:
 		"results/mash_sketch/paired_end/{paired_reads}/{paired_reads}.log"
 	shell:
 		"""
 		{params.time} -v --output={output.out_time} cat {input.read_1} {input.read_2} {input.read_3} | mash sketch -k {params.k} -s {params.s} -I {wildcards.paired_reads} -C Paired -r -o {output.out} -p {threads} - 2>> {log}
-        python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+        if [ "{params.update_mysql}" = "true" ]; then
+			python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+		fi
 		touch {output.check_file_mash}
 		"""

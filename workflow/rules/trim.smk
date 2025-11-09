@@ -17,7 +17,8 @@ rule trim_single_end_reads:
 		h="results/trimmed_reads/single_end/{single_reads}/{single_reads}.html",
 		j="results/trimmed_reads/single_end/{single_reads}/{single_reads}.json",
 		time=config["time_path"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	envmodules:
 		"tools",
 		"fastp/0.23.2",
@@ -28,7 +29,9 @@ rule trim_single_end_reads:
 	shell:
 		"""
 		{params.time} -v --output={output.out_time} fastp -i {input} -o {output} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -w {threads} -j {params.j} 2> {log}
-        python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+        if [ "{params.update_mysql}" = "true" ]; then
+			python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+		fi
 		touch {output.check_file_trim}
 		"""
 
@@ -54,7 +57,8 @@ rule trim_paired_end_reads:
 		h="results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.html",
 		j="results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}.json",
 		time=config["time_path"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	envmodules:
 		"tools",
 		"fastp/0.23.2",
@@ -67,6 +71,8 @@ rule trim_paired_end_reads:
 		{params.time} -v --output={output.out_time} fastp -i {input.in1} -I {input.in2} -o {output.out1} -O {output.out2} --merge --merged_out {params.out_merge} --unpaired1 {output.singleton} --unpaired2 {output.singleton} --overlap_diff_limit {params.overlap_diff_limit} --average_qual {params.average_qual} --length_required {params.length_required} {params.cut_tail} -h {params.h} -w {threads} -j {params.j} 2> {log}
 		cat {params.out_merge} >> {output.singleton} 2>> {log}
 		rm {params.out_merge}
-        python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+        if [ "{params.update_mysql}" = "true" ]; then
+			python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+		fi
 		touch {output.check_file_trim}
 		"""

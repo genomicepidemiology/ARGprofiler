@@ -4,6 +4,10 @@ time_path: /usr/bin/time
 # path for scripts
 scripts: workflow/scripts
 
+# specify whether a mysql database is going to be updated
+# set to "true" if you want to update the database
+update_mysql: "true"
+
 # zenodo urls
 zenodo_panres_fa: "https://zenodo.org/records/10091602/files/panres_genes.fa"
 zenodo_panres_meta: "https://zenodo.org/records/10091602/files/panres_annotations.tsv"

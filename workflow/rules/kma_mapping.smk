@@ -17,7 +17,8 @@ rule kma_single_end_reads_mOTUs:
 		out_fsa="results/kma_mOTUs/single_end/{single_reads}/{single_reads}.fsa",
 		kma_params=config["kma_params_motus"],
 		time=config["time_path"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
@@ -30,8 +31,11 @@ rule kma_single_end_reads_mOTUs:
 		{params.time} -v --output={output.out_time} kma -i {input.read} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads} 2>> {log}
 		rm results/kma_mOTUs/single_end/{wildcards.single_reads}/*.aln
 		gzip -f {params.out_fsa} 2>> {log}
-        python {params.scripts_dir}/get_time.py -f {output.out_time} --run >> {log}
-        python {params.scripts_dir}/get_mapstat.py -f {output.out_mapstat} --motus --pad_taxa --run >> {log}
+
+		if [ "{params.update_mysql}" = "true" ]; then
+			python {params.scripts_dir}/get_time.py -f {output.out_time} --run >> {log}
+			python {params.scripts_dir}/get_mapstat.py -f {output.out_mapstat} --motus --pad_taxa --run >> {log}
+		fi
 		touch {output.check_file_kma_mOTUs}
 		"""
 
@@ -60,7 +64,8 @@ rule kma_single_end_reads_panRes:
 		out_bam="results/kma_panres/single_end/{single_reads}/{single_reads}.bam",
 		out_fsa="results/kma_panres/single_end/{single_reads}/{single_reads}.fsa",
 		time=config["time_path"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
@@ -78,14 +83,16 @@ rule kma_single_end_reads_panRes:
 		rm results/kma_panres/single_end/{wildcards.single_reads}/*.aln
 		gzip -f {params.out_fsa}
 		Rscript {params.scripts_dir}/mapstatFilters.R -i {params.mapstat} -o {params.mapstat_filtered} -r {params.mapstat_table}
-        python {params.scripts_dir}/get_time.py -f {output.out_time} --run
-        python {params.scripts_dir}/get_mapstat.py -f {output.out_mapstat} --run >> {log}
+        if [ "{params.update_mysql}" = "true" ]; then
+			python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+            python {params.scripts_dir}/get_mapstat.py -f {output.out_mapstat} --run >> {log}
+		fi
 		touch {output.check_file_kma_panres}
 		"""
 
 rule kma_paired_end_reads_mOTUs:
 	"""
-	Mapping raw paired reads for identifying AMR using KMA with mOTUs db
+	Mapping trimmed paired reads for identifying AMR using KMA with mOTUs db
 	"""
 	input: 
 		read_1=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_1.trimmed.fastq"),
@@ -103,7 +110,8 @@ rule kma_paired_end_reads_mOTUs:
 		kma_params=config["kma_params_motus"],
 		out_fsa="results/kma_mOTUs/paired_end/{paired_reads}/{paired_reads}.fsa",
 		time=config["time_path"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
@@ -116,14 +124,16 @@ rule kma_paired_end_reads_mOTUs:
 		{params.time} -v --output={output.out_time} kma -ipe {input.read_1} {input.read_2} -i {input.read_3} -o {params.outdir} -t_db {params.db} {params.kma_params} -t {threads} 2>> {log}
 		rm results/kma_mOTUs/paired_end/{wildcards.paired_reads}/*.aln
 		gzip -f {params.out_fsa} 2>> {log}
-        python {params.scripts_dir}/get_time.py -f {output.out_time} --run
-        python {params.scripts_dir}/get_mapstat.py -f {output.out_mapstat} --motus --pad_taxa --run >> {log}
+        if [ "{params.update_mysql}" = "true" ]; then
+			python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+        	python {params.scripts_dir}/get_mapstat.py -f {output.out_mapstat} --motus --pad_taxa --run >> {log}
+		fi
 		touch {output.check_file_kma_mOTUs}
 		"""
 
 rule kma_paired_end_reads_panRes:
 	"""
-	Mapping raw paired reads for identifying AMR using KMA with panres db
+	Mapping trimmed paired reads for identifying AMR using KMA with panres db
 	"""
 	input: 
 		read_1=ancient("results/trimmed_reads/paired_end/{paired_reads}/{paired_reads}_1.trimmed.fastq"),
@@ -147,7 +157,8 @@ rule kma_paired_end_reads_panRes:
 		out_fsa="results/kma_panres/paired_end/{paired_reads}/{paired_reads}.fsa",
 		mapstat_table="prerequisites/db_panres/panres_lengths.tsv",
 		time=config["time_path"],
-		scripts_dir=config["scripts"]
+		scripts_dir=config["scripts"],
+		update_mysql=config["update_mysql"]
 	envmodules:
 		"tools",
 		"kma/1.4.12a",
@@ -165,7 +176,9 @@ rule kma_paired_end_reads_panRes:
 		rm results/kma_panres/paired_end/{wildcards.paired_reads}/*.aln 
 		gzip -f {params.out_fsa} 2>> {log}
 		Rscript prerequisites/mapstat_filtering/mapstatFilters.R -i {params.mapstat} -o {params.mapstat_filtered} -r {params.mapstat_table} 2>> {log}
-        python {params.scripts_dir}/get_time.py -f {output.out_time} --run
-        python {params.scripts_dir}/get_mapstat.py -f {output.out_mapstat} --run >> {log}
+        if [ "{params.update_mysql}" = "true" ]; then
+			python {params.scripts_dir}/get_time.py -f {output.out_time} --run
+        	python {params.scripts_dir}/get_mapstat.py -f {output.out_mapstat} --run >> {log}
+		fi
 		touch {output.check_file_kma_panres}
 		"""

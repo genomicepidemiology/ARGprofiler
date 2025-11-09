@@ -81,33 +81,3 @@ rule cleanup_paired_end_reads:
 		echo 'Finished cleaning up.' > {log}
 		touch {output.done}
 		"""
-
-rule tarball_results:
-	input:
-		expand("results/done/single_end/{sample_id}/done.txt", sample_id = single),
-		expand("results/done/paired_end/{sample_id}/done.txt", sample_id = paired)
-	output:
-		tar = "results.tar.gz",
-		check = "results_tar.done"
-	shell:
-		"""
-		mkdir -p temp_results
-		cp -r results/* temp_results/
-		tar -czf {output.tar} -C temp_results .
-		rm -rf temp_results
-		touch {output.check}
-		"""
-
-rule final_cleanup:
-	input:
-		tar = "results.tar.gz",
-		check = "results_tar.done"
-	output:
-		"results.done"
-	shell:
-		"""
-		if [ -f {input.tar} ]; then
-			rm -rf results/
-			touch {output}
-		fi
-		"""
