@@ -15,7 +15,7 @@ def parse_args():
     parser.add_argument(
         '-f', '--file',
         type=str,
-        help='mapstat file',
+        help='KMA .mapstat file to parse into SQL format',
         required=True,
         dest='file'
     )
@@ -24,14 +24,15 @@ def parse_args():
         '-o', '--output',
         type=str,
         default='results/sql/',
-        dest='output'
+        dest='output',
+        help='Output folder to store SQL scripts in'
     )
 
 
     parser.add_argument(
         '--motus',
         action='store_true',
-        help = '',
+        help = 'Deciper between mOTUs and PanRes mappings',
         dest='motus'
     )
 
@@ -198,54 +199,68 @@ def to_sql(mapstat, is_motus, out, run=False):
     else:
         cmds = mapstat.apply(panres_cmd, axis=1).values.tolist()
 
-    print("\n".join(cmds), file=out)
-    
+    print("\n".join(cmds), file=out)  
 
-    
+
+class EmptyFileError(Exception):
+    pass
 
 if __name__ == '__main__':
     args = parse_args()
 
-    if not os.path.exists(args.file) or os.path.getsize(args.file) == 0:
-        print(f"{args.file} is either emtpy or does not exist.")
-        sys.exit(0)
+    # Check if file is there and not empty
+    if not os.path.exists(args.file):
+        raise FileNotFoundError(f"{args.file} does not exist.")
+    elif os.path.getsize(args.file) == 0:
+        raise EmptyFileError("{args.file} is empty.")
 
+    # Read the mapstat file
     df, run_id, kma_header_sql = read_mapstat(args.file)
 
-
+    # Figure out what kind of database were mapped against
     db = 'mOTU' if args.motus else 'PanRes'
+
+    # Create .sql output file
     outFilename = os.path.join(args.output, f"kma_{run_id}_{db}.sql")  
     out = open(outFilename, 'w')
+    
+    # Procedure for inserting headers into SQL database
     print(kma_header_sql, file=out)
-
+    
+    # if mOTUs database, some wrangling of OTU names are needed
     if args.motus:
         taxa = get_taxonomy()
     
         levels = ['kingdom', 'phylum', 'class', 'order', 'family', 'genus', 'mOTU']
         results = defaultdict(list)
-
-
+        
+        # Merge taxonomic information
         df2 = df.merge(taxa, left_on=['refSequence'], right_on=['refSequence'])
         df2['fragmentCountAln_adj'] = df2['fragmentCountAln'] / (df2['gene_length']/1e3)
         col = ['run_accession']
 
+        # For unknown taxas that doesn't have a known name
         if args.pad_taxa:
             df2 = pad_taxonomy2(df2, levels=levels)
         
+        # Aggregate counts
         for taxlevel in levels:
             col += [taxlevel + '_name', taxlevel + '_tax']
             
             aggData = agg_taxa(mapstat=df2, groupCols=col)
             results[taxlevel].append(aggData)
     
+        # Export to SQL calls
         for k, v in results.items():
             r = pd.concat(v).rename(columns={'refSequence': 'n_references'})
             to_sql(r, is_motus=args.motus, run=args.run, out=out)
     else:
+        # Export PanRes counts to SQL calls
         to_sql(df, is_motus=args.motus, run=args.run, out=out)
 
     out.close()
 
+    # If true, immediately update SQL database
     if args.run:
         cmd = f"mysql --database=AvA_2 < {outFilename}"
         p = subprocess.run(cmd, shell=True)
